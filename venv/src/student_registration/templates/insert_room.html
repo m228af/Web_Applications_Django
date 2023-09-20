@@ -1,0 +1,78 @@
+<!-- Include Functions -->
+{% include 'base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+{% include 'header.html' %}
+{% include 'side_nav.html' %}
+
+
+  <main id="main" class="main">
+    <div class="pagetitle">
+      <nav>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="{% url 'dashboard'%}" style="color: orangered;text-decoration: underline;">Home</a></li>
+          <li class="breadcrumb-item active">Dashboard</li>
+        </ol>
+      </nav>
+      <h1>Insert New Programme</h1>
+     
+    </div><!-- End Page Title -->
+
+    <section class="section dashboard">
+      <div class="row">
+
+        <!-- Left side columns -->
+        <div class="col-lg-8">
+          <div class="row">
+
+            <!-- Customers Card -->
+            <div class="container">
+
+                {% if messages %}
+                <div class="alert alert-success" id="success-message" role="alert" style="display: none;">
+
+                  {% for message in messages %}
+                    <p>{{ message }}</p>
+                  {% endfor %}
+                </div>
+
+                {% endif %}
+
+              <form action="" method="post" id="StudentForm" autocomplete="off">
+
+                {% csrf_token %}
+                <div class="container-fluid">
+                  {{ form|crispy }}
+                  <input type="submit" value="Submit" class="btn btn-success">
+                </div>
+              </form>
+
+             
+
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // JavaScript to hide the success message after a delay
+    window.setTimeout(function() {
+      var successMessage = document.getElementById('success-message');
+      if (successMessage) {
+        successMessage.style.display = 'none';
+      }
+    }, 5000); // 5000 milliseconds = 5 seconds
+  </script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var successMessageDiv = document.getElementById('success-message');
+      if (successMessageDiv) {
+        successMessageDiv.style.display = 'block';
+      }
+    });
+  </script>
+{% endblock %}

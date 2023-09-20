@@ -1,0 +1,49 @@
+
+{%include 'base.html' %}
+{%load crispy_forms_tags%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home</title>
+
+  <style>
+    body{
+      background-color: white;
+    }
+  </style>
+</head>
+<body>
+
+<div class="mx-auto alert alert-light d-flex">
+  <h6 class="tex-end">v1.0.0</h6>
+
+  
+</div>
+
+<div class="col-5  mx-auto my-5 p-5 container border" id="form-div">
+  {%block content%}
+  <h3 class="text-center mx-auto" style="color: midnightblue;">{{title}}</h3>
+
+<marquee behavior="" direction="left">
+
+  <p class="text-center"><i>Levaraging Digital Technologies to achieve Academic Excellence</i></p>
+
+</marquee>
+  {% endblock %}
+  <form class="mx-auto form-group" method="post">
+    {%csrf_token%}
+    {{form|crispy}}
+    <!-- Submit button -->
+    <table class="mx-auto p-1">
+      <th><button type="submit" class="btn btn-success rounded-0 mb-4" id="btn-sign"><a href="/login" class="text-light">login</a></button></th>
+      <th><button type="submit" class="btn btn-danger rounded-0 mb-4" id="btn-sign"><a href="{% url 'signup' %}"  class="text-light">Sign up</a></button></th>
+    </table>
+</div>
+
+</form>
+</div>
+  
+</body>
+</html>

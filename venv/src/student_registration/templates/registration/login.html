@@ -1,0 +1,80 @@
+{%include 'base.html' %}
+{%load crispy_forms_tags%}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    body{
+      background-color: white;
+    }
+    button{
+      width: 100%;
+      transition: all 0.6s !important;
+
+    }
+    button:hover{
+      background-color: orangered !important;
+      color: white;
+    }
+    header{
+      background-color: white;
+    }
+  </style>
+  
+</head>
+
+<body>
+  <!-- Section: Design Block -->
+  <header class="bg-light">
+    <small>version 1.0.0.0</small>
+  </header>
+<section class="">
+  <!-- Jumbotron -->
+  <div class="px-4 py-5 px-md-5 text-center text-lg-start">
+    <div class="container">
+      <div class="row gx-lg-5 align-items-center">
+
+        <div class="col-lg-6 mb-5 mb-lg-0 mx-auto">
+          <div class="card">
+            <div class="card-body py-5 px-md-5">
+
+
+              <form method="post" autocomplete="off">
+                {%csrf_token%}
+                <div class="form-outline mb-4">
+                  {{form|crispy}}
+
+                  <button type="submit" class="btn btn-primary rounded-0 btn-block mb-4">
+                    Login
+                  </button>
+                  <p>Dont have Account? Signup <a href="{%url 'signup'%}">here</a></p>
+                </div>
+               
+
+                
+                
+
+                <!-- Register buttons -->
+               
+                
+              </form>
+
+
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Jumbotron -->
+</section>
+
+
+</body>
+
+</html>

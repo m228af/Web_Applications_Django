@@ -1,0 +1,13 @@
+{% include 'base.html' %}
+<div class="search-bar d-flex">
+    <form class="search-form d-flex align-items-center" method="POST" action="#">
+      {%csrf_token%}
+
+      <input type="text" name="query" placeholder="Search" title="Enter search keyword" class="form-control rounded-0">
+      <button type="submit" title="Search" class="btn btn-secondary rounded-0" style="background-color: orangered;"><i class="bi bi-search"></i></button> &nbsp;&nbsp;&nbsp;&nbsp;
+      <a href="{%url 'import_student'%}" class="btn btn-secondary">Import</a>&nbsp;&nbsp;&nbsp;&nbsp;
+      <a href="" class="btn btn-success">Export</a>
+
+
+    </form>
+  </div><!-- End Search Bar -->

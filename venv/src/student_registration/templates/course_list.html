@@ -1,0 +1,138 @@
+{% include 'base.html' %}
+{% load crispy_forms_tags %}
+{%block content%}
+{% include 'header.html' %} 
+
+
+  {% include 'side_nav.html' %}
+
+  <main id="main" class="main">
+
+    <div class="pagetitle">
+      <nav>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="{% url 'dashboard'%}">Home</a></li>
+          <li class="breadcrumb-item active">Dashboard</li>
+        </ol>
+      </nav>
+      <h1>{{title}}</h1>
+
+      <div class="search-bar">
+        <form class="search-form d-flex align-items-center" method="POST" action="#">
+          {%csrf_token%}
+  
+          <input type="text" name="query" placeholder="Search" title="Enter search keyword">
+          <button type="submit" title="Search"><i class="bi bi-search"></i></button>
+        </form>
+      </div><!-- End Search Bar -->
+
+    </div><!-- End Page Title -->
+
+    <section class="section dashboard">
+      <div class="row">
+
+        <!-- Left side columns -->
+        <div class="col-lg-12">
+          <div class="row">
+
+            <!-- Customers Card -->
+            <div class="container">
+             
+
+      
+                    <table class="table table-border table-hover table-striped   table-sm align-content-center m-auto">
+                        <tr class="bg-warning">
+                            <!-- <th>#</th> -->
+                            <th>COURSE CODE</th>
+                            <th>COURSE NAME</th>
+                            <th>PROGRAM</th>
+                            <!-- <th>P/N</th> -->
+                            <!-- <th>FUNDER</th>
+                            <th>PROGRAM</th> -->
+                            <!-- <th>PROGRAM</th> -->
+                            <!-- <th>PICTO</th> -->
+                            <!-- <th>CONDITION</th> -->
+                            <!-- <th>STOREMAN</th>
+                            <th>DATE RECEIVED</th> -->
+                            <!-- <th>TIMESTAMP</th> -->
+                            <th>Action</th>
+                        </tr>
+                        {% for instance in queryset %}
+                        <tr>
+                            <!-- <td>{{forloop.counter}}</td> -->
+                            <td>{{instance.module_code}}</td>
+                            <td>{{instance.module_name}}</td>
+                            <td>{{instance.deg_code}}</td>
+                            <!-- <td>{{instance.partner_number}}</td> -->
+                            <!-- <td>{{instance.funder}}</td> -->
+                            <!-- <td>{{instance.program}}</td> -->
+                            <!-- <td>{{instance.student_gender}}</td> -->
+                            <!-- <td>{{instance.picto}}</td> -->
+                            <!-- <td>{{instance.condition}}</td> -->
+                            <!-- <td>{{instance.programme_code}}</td> -->
+                            <!-- <td >{{instance.date_received}}</td> -->
+                            <!-- <td>{{instance.timestamp}}</td> -->
+                            <td class="d-flex" width="100%">
+                                <button class="btn btn-success" name="gadget_id"><a href="#" class="text-light">Edit</a></button>&nbsp;&nbsp;&nbsp;
+                                <button class="btn btn-danger">Delete</button>&nbsp;&nbsp;&nbsp;
+                                <button class="btn btn-info">View</button>
+
+                            
+                            </td>
+
+                          
+                        </tr>
+                        {% endfor %}
+                    </table>
+        
+                    </table>
+                  
+                </div>
+        {% endblock %}
+            
+
+            </div>
+          </div>
+        </div>
+
+            </main>
+
+               
+
+               
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+     

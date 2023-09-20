@@ -1,0 +1,227 @@
+<!-- ======= Sidebar ======= -->
+<aside id="sidebar" class="sidebar">
+
+    <ul class="sidebar-nav" id="sidebar-nav">
+
+      <li class="nav-item">
+        <a class="nav-link " href="{% url 'dashboard'%}">
+          <i class="bi bi-grid"></i>
+          <span>Dashboard</span>
+        </a>
+      </li><!-- End Dashboard Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-person"></i><span>Student Management</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+          <li>
+            <a href="{% url 'insert_student'%}">
+              <i class="bi bi-person"></i><span>Register New Student</span>
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'student_list'%}">
+              <i class="bi bi-person"></i><span>Update Student</span>
+            </a>
+          </li>
+          
+          <li>
+        </ul>
+      </li><!-- End Components Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-person-circle"></i><span>User management</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="forms-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+          <li>
+            <a href="{%url 'insert_role'%}">
+              <i class="bi bi-person-circle"></i><span>Add User Role</span>
+            </a>
+          </li>
+          <!-- <li>
+            <a href="{%url 'insert_user'%}">
+              <i class="bi bi-person-circle"></i><span>Add new user</span>
+            </a>
+          </li> -->
+          <li>
+            <a href="forms-layouts.html">
+              <i class="bi bi-person-circle"></i><span> Delete New User</span>
+            </a>
+          </li>
+          <li>
+            <a href="forms-editors.html">
+              <i class="bi bi-circle"></i><span>Change Password</span>
+            </a>
+          </li>
+          
+        </ul>
+      </li><!-- End Forms Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-person-workspace"></i><span>Invigilator Management</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="tables-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+          <li>
+            <a href="{% url 'insert_invigilator'%}">
+              <i class="bi bi-person-workspace"></i><span>Add Invigilator</span>
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'invigilator_list'%}">
+              <i class="bi bi-person-workspace"></i><span>Update Invigilator</span>
+            </a>
+          </li>
+        </ul>
+      </li><!-- End Tables Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#charts-nav" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-journal-code"></i><span>Courses</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="charts-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+          <li>
+            <a href="{%url 'insert_course'%}">
+              <i class="bi bi-circle"></i><span>Add New Course</span>
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'course_list'%}">
+              <i class="bi bi-circle"></i><span>Update Courses</span>
+            </a>
+          </li>
+          <li>
+            <a href="charts-echarts.html">
+              <i class="bi bi-circle"></i><span>Courses on Offer</span>
+            </a>
+          </li>
+        </ul>
+      </li><!-- End Charts Nav -->
+
+
+
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#programme-nav" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-mortarboard"></i><span>Programmes</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="programme-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+          <li>
+            <a href="{% url 'insert_program'%}">
+              <i class="bi bi-circle"></i><span>Add New Programme</span>
+            </a>
+          </li>
+          <li>
+            <a href="charts-apexcharts.html">
+              <i class="bi bi-circle"></i><span>Update Programme</span>
+            </a>
+          </li>
+          <li>
+            <a href="charts-echarts.html">
+              <i class="bi bi-circle"></i><span>Programmes on Offer</span>
+            </a>
+          </li>
+        </ul>
+      </li><!-- End Charts Nav -->
+
+
+
+
+
+
+
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#exam_room" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-house-gear"></i><span>Exam Venue Management</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="exam_room" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+          <li>
+            <a href="{%url 'insert_room'%}">
+              <i class="bi bi-circle"></i><span>Add new room</span>
+            </a>
+          </li>
+          <li>
+            <a href="icons-remix.html">
+              <i class="bi bi-circle"></i><span>Update room</span>
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'create_timetable'%}">
+              <i class="bi bi-circle"></i><span>Create Timetable</span>
+            </a>
+          </li>
+        </ul>
+      </li><!-- End Icons Nav -->
+
+
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#reports" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-house-gear"></i><span>Reports</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="reports" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+          <li>
+            <a href="icons-bootstrap.html">
+              <i class="bi bi-circle"></i><span>Registered Students</span>
+            </a>
+          </li>
+          <li>
+            <a href="icons-remix.html">
+              <i class="bi bi-circle"></i><span>Invigilators</span>
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'timetable'%}">
+              <i class="bi bi-circle"></i><span>Timetable for the semester</span>
+            </a>
+          </li>
+          <li>
+            <a href="icons-boxicons.html">
+              <i class="bi bi-circle"></i><span>List of rooms</span>
+            </a>
+          </li>
+        </ul>
+      </li><!-- End Icons Nav -->
+
+
+
+    
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="pages-faq.html">
+          <i class="bi bi-question-circle">Settings</i>
+          <span></span>
+        </a>
+      </li><!-- End F.A.Q Page Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="pages-contact.html">
+          <i class="bi bi-envelope"></i>
+          <span>Design Time Table</span>
+        </a>
+      </li><!-- End Contact Page Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="pages-register.html">
+          <i class="bi bi-card-list"></i>
+          <span>Other</span>
+        </a>
+      </li><!-- End Register Page Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="pages-blank.html">
+          <i class="bi bi-file-earmark"></i>
+          <span>Logout</span>
+        </a>
+      </li><!-- End Blank Page Nav -->
+
+    </ul>
+
+
+
+  </aside><!-- End Sidebar-->
+
+

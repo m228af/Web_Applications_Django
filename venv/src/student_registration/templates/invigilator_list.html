@@ -1,0 +1,134 @@
+{%load static%}
+{% include 'base.html' %}
+{% load crispy_forms_tags %}
+{%block content%}
+{% include 'header.html' %} 
+
+
+  {% include 'side_nav.html' %}
+
+  <main id="main" class="main">
+
+    <div class="pagetitle">
+      <nav>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="{% url 'dashboard'%}">Home</a></li>
+          <li class="breadcrumb-item active">Dashboard</li>
+        </ol>
+      </nav>
+      <h1>{{title}}</h1>
+      <div class="search-bar d-flex">
+        <form class="search-form d-flex align-items-center" method="POST" action="#">
+          {%csrf_token%}
+  
+          <input type="text" name="query" placeholder="Search" title="Enter search keyword" class="form-control">
+          <button type="submit" title="Search" class="btn btn-secondary rounded-0" style="background-color: orangered;"><i class="bi bi-search"></i></button>&nbsp;&nbsp;&nbsp;&nbsp;
+          <a href="" class="btn btn-secondary">Import</a>&nbsp;&nbsp;&nbsp;&nbsp;
+          <a href="" class="btn btn-success">Export</a>
+        </form>
+      </div><!-- End Search Bar -->
+    </div><!-- End Page Title -->
+
+    <section class="section dashboard">
+      <div class="row">
+
+        <!-- Left side columns -->
+        <div class="col-lg-12">
+          <div class="row">
+
+            <!-- Customers Card -->
+            <div class="container">
+             
+
+      
+                    <table class="table table-border table-hover table-striped   table-sm align-content-center m-auto">
+                        <tr class="bg-warning">
+                            <!-- <th>#</th> -->
+                            <th>EC No/EMPLOYEE ID</th>
+                            <th>FULL NAME</th>
+                            <th>GENDER </th>
+                            <!-- <th>P/N</th> -->
+                            <!-- <th>FUNDER</th>
+                            <th>PROGRAM</th> -->
+                            <th>NATIONAL ID</th>
+                            <!-- <th>PICTO</th> -->
+                            <!-- <th>CONDITION</th> -->
+                            <!-- <th>STOREMAN</th>-->
+                            <th>ROLE</th>
+                            <!-- <th>TIMESTAMP</th>--> 
+                            <th>Action</th> 
+                        </tr>
+                        {% for instance in queryset %}
+                        <tr>
+                            <!-- <td>{{forloop.counter}}</td> -->
+                            <td class="bg-light border">{{instance.emp_id}}</td>
+                            <td class="bg-light border">{{instance.emp_name}}</td>
+                            <td class="bg-light border">{{instance.emp_gender}}</td>
+                            <td class="bg-light border">{{instance.empt_email}}</td>
+                            <td class="bg-light border" >{{instance.user_role}}</td> 
+                            <!-- <td>{{instance.timestamp}}</td> -->
+                            <td class="d-flex">
+                                <button class="btn btn-success" name="gadget_id"><a href="#" class="text-light">Edit</a></button>&nbsp;&nbsp;&nbsp;
+                                <button class="btn btn-danger">Delete</button>&nbsp;&nbsp;&nbsp;
+                                <button class="btn btn-info">View</button>
+
+                            
+                            </td>
+
+                          
+                        </tr>
+                        {% endfor %}
+                    </table>
+        
+                    </table>
+                  
+                </div>
+        {% endblock %}
+            
+
+            </div>
+          </div>
+        </div>
+
+            </main>
+
+               
+
+               
+
+            <script src="{% static 'home/js/custom.js'%}"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+     

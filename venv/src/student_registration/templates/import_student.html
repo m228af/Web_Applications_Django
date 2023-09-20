@@ -1,0 +1,10 @@
+{% include 'base.html' %}
+<div class="search-bar d-flex">
+    <form class="search-form d-flex align-items-center" method="POST" action="#" enctype="multipart/form-data">
+      {%csrf_token%}
+      <input type="file" name="myFile">
+      <input type="submit" value="submitt">
+      <!-- <button type="submit" title="Search" class="btn btn-secondary rounded-0" style="background-color: orangered;"><i class="bi bi-search"></i>  <input type="submit" value="upload"> </button> &nbsp;&nbsp;&nbsp;&nbsp; -->
+      <a href="" class="btn btn-success">Export</a>
+    </form>
+  </div>
