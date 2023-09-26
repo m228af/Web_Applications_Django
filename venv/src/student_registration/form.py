@@ -61,3 +61,8 @@ class DegreeForm(forms.ModelForm):
         fields="__all__"
 
 
+
+
+class SearchForm(forms.Form):
+    search_query = forms.CharField(max_length=100, label='Search for Student')
+

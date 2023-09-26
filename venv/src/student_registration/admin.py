@@ -6,10 +6,6 @@ from import_export.admin import ImportExportModelAdmin
 
 
 # Register your models here.
-
-
-
-
 class StudentAdmin(ImportExportModelAdmin):
     list_display=[
                  "student_id",

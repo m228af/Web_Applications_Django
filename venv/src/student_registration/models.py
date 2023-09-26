@@ -93,6 +93,15 @@ class Exam(models.Model):
     room_name=models.ForeignKey(Room,on_delete=models.CASCADE)
     def __str__(self):
         return self.exam_date
+
+# class RegisterStudent(models.Model):
+#     student_id=models.ForeignKey(Student,on_delete=models.CASCADE)
+#     reg_status=models.CharField(max_length=20)
+#     student_level=models.ForeignKey(Student,on_delete=models.CASCADE)
+#     semester=models.ForeignKey(Student,on_delete=models.CASCADE)
+    
+
+
     
 
 

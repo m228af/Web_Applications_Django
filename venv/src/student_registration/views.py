@@ -2,6 +2,7 @@ from django.shortcuts import render,redirect,get_object_or_404
 from .form import *
 from .models import *
 from django.contrib import messages
+from django.utils import timezone
 
 from django.http import HttpResponse
 
@@ -34,9 +35,15 @@ def signup(request):
 
 #Home page
 def Dashboard(request):
-    title='ICT Management System' 
+    title='Biometric Exam Guard'
+    today = timezone.now().date() 
+    student_count = Student.objects.count()
+    exam_count=Exam.objects.filter(exam_date=today).count()
+    invigilator_count=Invigilator.objects.count()
     context={
-        "title":title
+       "student_count":student_count,
+       "exam_count":exam_count,
+       "invigilator_count":invigilator_count
     }
     return render(request,"dashboard.html",context)
 
@@ -79,15 +86,43 @@ def update_student(request, id):
 
 def delete_student(request, id):
     student = get_object_or_404(Student, id=id)  # Fetch the student object by ID
-    
     if request.method == 'POST':
         student.delete()  # Delete the student
         return redirect('student_list')  # Redirect to a success page or another URL after deletion
     # Handle GET request here if needed
-    # ...
     return redirect('student_list')  # Redirect to a different URL after deletion or GET request
 
 
+
+
+# views.py
+from django.shortcuts import render
+from .models import Student
+
+def search_student(request):
+    students = Student.objects.all()  # Initialize with all students
+
+    if request.method == 'POST':
+        search_query = request.POST.get('custom_search_query')
+        print(f"Search Query: {search_query}")  # Add this line for debugging
+        if search_query:
+            students = Student.objects.filter(student_id__icontains=search_query)
+    return render(request, 'search.html', {'students': students})
+
+
+
+
+
+
+
+
+##Count students to be displayed on the dashboard
+
+
+
+
+
+##Upload CSV Files as alternative to manual data entry on the system
 
 def simple_upload(request):
     if request.method=='POST':
@@ -97,7 +132,6 @@ def simple_upload(request):
         if not new_stu.name.endswith('xlsx'):
             messages.info(request,'wrong format')
             return render(request,'student_list.html')
-        
         imported_data=ds.load(new_stu.read(),format='xlsx')
         for data in imported_data:
             value=Student(
@@ -114,8 +148,8 @@ def simple_upload(request):
                 data[10]
             )
             value.save()
-            return render (request,"success.html")
-    return render(request,'import_student.html')
+            messages.success(request,'imported successfully')
+        return student_list(request)
 
 
 

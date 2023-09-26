@@ -1,0 +1,21 @@
+# Ignore virtual environment folders
+venv/
+env/
+
+# Ignore database files
+db.sqlite3
+
+# Ignore compiled Python files
+*.pyc
+
+# Ignore secret keys and sensitive settings (modify as needed)
+secret_key.py
+settings/local.py
+settings/production.py
+
+# Ignore log files
+*.log
+
+# Ignore media and static files (if you're using a different storage for production)
+media/
+static/

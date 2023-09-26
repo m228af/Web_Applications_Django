@@ -17,7 +17,25 @@
         </ol>
       </nav>
       <h1> {{title}} </h1>
-      {%include 'upload.html'%}
+
+      <div class="container">
+
+        {% if messages %}
+                <div class="alert alert-success" id="success-message" role="alert" style="display: none;">
+                  {%for message in messages%}
+                    <p>{{ message }}</p>
+                    {%endfor %}
+                  {% endif %}
+                </div><br><br>
+
+                
+      </div>
+      <form class="search-form d-flex align-items-center" method="POST" action="{%url 'import_student'%}" enctype="multipart/form-data">
+        {%csrf_token%}
+        <input type="file" name="myFile" style="color: red;">
+        <input type="submit" value="import file" class="btn btn-success">&nbsp;&nbsp;&nbsp;
+        <a href="" class="btn btn-success">Export</a>
+      </form>
     </div><!-- End Page Title -->
 
     <section class="section dashboard">
@@ -48,12 +66,16 @@
                             <td class="bg-light border">{{instance.student_gender}}</td>                        
                             <td class="bg-light border">{{instance.deg_code}}</td>
                             <td class="d-flex border" width="100%">
+                              <form action="" method="post">
+                                {%csrf_token%}
+                                <button class="btn btn-success" name="student_id"><a href="{% url 'update_student' instance.id%}" class="text-light">Edit</a></button>&nbsp;&nbsp;&nbsp;
+                                <button class="btn btn-info" ><a href="#" class="text-light">View</a></button>&nbsp;&nbsp;&nbsp;
+                              </form>
                                 <form action="{%url 'delete_student' instance.id%}" method="post" autocomplete="off">
                                   {%csrf_token%}
                                 <!-- <button class="btn btn-success" name="student_id"><a href="{% url 'update_student' instance.id%}" class="text-light">Edit</a></button>&nbsp;&nbsp;&nbsp; -->
                                 <!-- <button class="btn btn-danger"><a href="{% url 'delete_student' instance.id%}" class="text-light">Delete</a></button>&nbsp;&nbsp;&nbsp; -->
                                 <button class="btn btn-danger" type="submit">Delete</button>
-                                <button class="btn btn-info" ><a href="#" class="text-light">View</a></button>
                                 </form>
                             </td>
                         </tr>
@@ -85,6 +107,11 @@
 
 
 <script src="{% static 'home/js/custom.js'%}"></script>
+
+
+
+
+
 
 
 

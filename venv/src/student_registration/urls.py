@@ -8,14 +8,14 @@ urlpatterns=[
 path('admin/', admin.site.urls),
 path('index/', views.Home, name='home'),
 path('signup/', views.signup,name='signup'),
-
 path('dashboard/', views.Dashboard, name='dashboard'),
 path('insert_student/',views.Student_Form, name='insert_student'),
 path('student_list<int:id>', views.update_student, name='update_student'),
 path('delete_student<int:id>/', views.delete_student, name='delete_student'),
 path('import_student/', views.simple_upload, name='import_student'),
+path('search/', views.search_student, name='search'),
 
-
+# path('display_students/', views.count_students, name='count_students'),
 
 path('insert_program/',views.Programme_Form, name='insert_program'),
 path('insert_course/',views.Course_Form, name='insert_course'),

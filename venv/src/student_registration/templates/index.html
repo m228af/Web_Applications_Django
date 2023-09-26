@@ -12,6 +12,10 @@
     body{
       background-color: white;
     }
+
+    button{
+      width: auto;
+    }
   </style>
 </head>
 <body>
@@ -36,9 +40,9 @@
     {%csrf_token%}
     {{form|crispy}}
     <!-- Submit button -->
-    <table class="mx-auto p-1">
-      <th><button type="submit" class="btn btn-success rounded-0 mb-4" id="btn-sign"><a href="/login" class="text-light">login</a></button></th>
-      <th><button type="submit" class="btn btn-danger rounded-0 mb-4" id="btn-sign"><a href="{% url 'signup' %}"  class="text-light">Sign up</a></button></th>
+    <table class="mx-auto">
+      <th><button type="submit" class="btn btn-success rounded" ><a href="/login" class="text-light">login</a></button></th>
+      <th><button type="submit" class="btn btn-danger rounded" ><a href="{% url 'signup' %}"  class="text-light">Sign up</a></button></th>
     </table>
 </div>
 
