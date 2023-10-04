@@ -9,6 +9,18 @@
   <main id="main" class="main">
 
     <div class="pagetitle">
+      {% if messages %}
+      {%for message in messages%}
+      <p
+      class="alert-success"
+      id="success-message"
+      role="alert"
+      style="display: none;"
+      >
+      {{message}}
+      </p>
+      {%endfor %}
+      {% endif %}
       <nav>
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="{% url 'dashboard'%}">Home</a></li>
@@ -16,15 +28,6 @@
         </ol>
       </nav>
       <h1>{{title}}</h1>
-
-      <div class="search-bar">
-        <form class="search-form d-flex align-items-center" method="POST" action="#">
-          {%csrf_token%}
-  
-          <input type="text" name="query" placeholder="Search" title="Enter search keyword">
-          <button type="submit" title="Search"><i class="bi bi-search"></i></button>
-        </form>
-      </div><!-- End Search Bar -->
 
     </div><!-- End Page Title -->
 
@@ -37,45 +40,94 @@
 
             <!-- Customers Card -->
             <div class="container">
+
+              <form
+              class="search-form d-flex align-items-center "
+              method="POST"
+              action="{% url 'search_invigilator' %}"
+              autocomplete="off"
+          >
+              {% csrf_token %}
+              <input type="text" name="search_query" style="height: 37px;border-radius: 0;border: 1px solid midnightblue;">
+              <button type="submit" title="Search" class="btn btn-primary rounded-0">
+                  <i class="bi bi-search"></i>
+                  search
+              </button>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+              <a href="{%url 'insert_course'%}" style="text-decoration: underline;">Add new</a>
+
+          </form> <br>
+
              
 
       
                     <table class="table table-border table-hover table-striped   table-sm align-content-center m-auto">
                         <tr class="bg-warning">
-                            <!-- <th>#</th> -->
                             <th>COURSE CODE</th>
                             <th>COURSE NAME</th>
                             <th>PROGRAM</th>
-                            <!-- <th>P/N</th> -->
-                            <!-- <th>FUNDER</th>
-                            <th>PROGRAM</th> -->
-                            <!-- <th>PROGRAM</th> -->
-                            <!-- <th>PICTO</th> -->
-                            <!-- <th>CONDITION</th> -->
-                            <!-- <th>STOREMAN</th>
-                            <th>DATE RECEIVED</th> -->
-                            <!-- <th>TIMESTAMP</th> -->
                             <th>Action</th>
                         </tr>
                         {% for instance in queryset %}
                         <tr>
-                            <!-- <td>{{forloop.counter}}</td> -->
                             <td>{{instance.module_code}}</td>
                             <td>{{instance.module_name}}</td>
                             <td>{{instance.deg_code}}</td>
-                            <!-- <td>{{instance.partner_number}}</td> -->
-                            <!-- <td>{{instance.funder}}</td> -->
-                            <!-- <td>{{instance.program}}</td> -->
-                            <!-- <td>{{instance.student_gender}}</td> -->
-                            <!-- <td>{{instance.picto}}</td> -->
-                            <!-- <td>{{instance.condition}}</td> -->
-                            <!-- <td>{{instance.programme_code}}</td> -->
-                            <!-- <td >{{instance.date_received}}</td> -->
-                            <!-- <td>{{instance.timestamp}}</td> -->
                             <td class="d-flex" width="100%">
-                                <button class="btn btn-success" name="gadget_id"><a href="#" class="text-light">Edit</a></button>&nbsp;&nbsp;&nbsp;
-                                <button class="btn btn-danger">Delete</button>&nbsp;&nbsp;&nbsp;
-                                <button class="btn btn-info">View</button>
+                              <form action="" method="post">
+                                {%csrf_token%}
+                                <button class="btn btn-success" name="course_code">
+                                    <a href="{% url 'update_room' instance.id%}" class="text-light">Edit</a>
+                                </button>
+                                &nbsp;&nbsp;&nbsp;
+                            </form>
+                            <button
+                            class="btn btn-danger"
+                            type="submit"
+                            data-bs-toggle="modal"
+                            data-bs-target="#staticBackdrop"
+                        >Delete</button>
+                        <!-- Modal -->
+                        <div
+                            class="modal fade bg-light"
+                            id="staticBackdrop"
+                            data-bs-backdrop="static"
+                            data-bs-keyboard="false"
+                            tabindex="-1"
+                            aria-labelledby="staticBackdropLabel"
+                            aria-hidden="true"
+                        >
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button
+                                            type="button"
+                                            class="btn-close"
+                                            data-bs-dismiss="modal"
+                                            aria-label="Close"
+                                        ></button>
+                                    </div>
+                                    <div class="modal-body" >
+                                        <p>Are you sure you want to delete this record? This action cannot be reversed</p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <form action="{%url 'delete_course' instance.id%}" method="post" autocomplete="off">
+                                            {%csrf_token%}
+                                            <button
+                                                class="btn btn-danger"
+                                                type="submit"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#staticBackdrop"
+                                            >Delete</button>
+                                        </form>
+                                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cancel</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
 
                             
                             </td>

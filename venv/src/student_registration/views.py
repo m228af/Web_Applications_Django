@@ -3,11 +3,8 @@ from .form import *
 from .models import *
 from django.contrib import messages
 from django.utils import timezone
-
 from django.http import HttpResponse
-
 from openpyxl import load_workbook
-
 from .resources import StudentResource
 from tablib import Dataset
 
@@ -80,6 +77,7 @@ def update_student(request, id):
     form=StudentForm(request.POST or None,instance=students)
     if form.is_valid():
             form.save()
+            messages.success(request,'Updated Successfully')
             return redirect('student_list')
     return render(request,'insert_student.html',{'form':form})
 
@@ -88,37 +86,22 @@ def delete_student(request, id):
     student = get_object_or_404(Student, id=id)  # Fetch the student object by ID
     if request.method == 'POST':
         student.delete()  # Delete the student
+        messages.success(request,'Deleted Successfully')
         return redirect('student_list')  # Redirect to a success page or another URL after deletion
     # Handle GET request here if needed
     return redirect('student_list')  # Redirect to a different URL after deletion or GET request
 
 
-
-
-# views.py
-from django.shortcuts import render
-from .models import Student
-
 def search_student(request):
-    students = Student.objects.all()  # Initialize with all students
-
     if request.method == 'POST':
-        search_query = request.POST.get('custom_search_query')
-        print(f"Search Query: {search_query}")  # Add this line for debugging
-        if search_query:
-            students = Student.objects.filter(student_id__icontains=search_query)
-    return render(request, 'search.html', {'students': students})
-
-
-
-
-
-
-
-
-##Count students to be displayed on the dashboard
-
-
+        form = SearchForm(request.POST or None)
+        if form.is_valid():
+            search_query = form.cleaned_data['search_query']
+            records = Student.objects.filter(student_id__icontains=search_query)
+            return render(request, 'search.html', {'form': form, 'records': records})
+    else:
+        form = StudentForm
+    return render(request, 'search.html', {'form': form})
 
 
 
@@ -148,7 +131,7 @@ def simple_upload(request):
                 data[10]
             )
             value.save()
-            messages.success(request,'imported successfully')
+        messages.success(request,'imported successfully')
         return student_list(request)
 
 
@@ -186,6 +169,39 @@ def invigilator_list(request):
 
 
 
+
+
+def update_invigilator(request, id):
+    invigilator=Invigilator.objects.get(id=id) 
+    form=InvigilatorForm(request.POST or None,instance=invigilator)
+    if form.is_valid():
+            form.save()
+            messages.success(request,'Updated Successfully')
+            return redirect('invigilator_list')
+    return render(request,'insert_invigilator.html',{'form':form})
+
+
+def delete_invigilator(request, id):
+    invigilator = get_object_or_404(Invigilator, id=id)  
+    if request.method == 'POST':
+        invigilator.delete() 
+        messages.success(request,'Deleted Successfully')
+        return redirect('invigilator_list')  
+    return redirect('invigilator_list') 
+
+def search_invigilator(request):
+    if request.method == 'POST':
+        form = SearchInvigilator(request.POST or None)
+        if form.is_valid():
+            search_query = form.cleaned_data['search_query']
+            records = Invigilator.objects.filter(emp_id__icontains=search_query)
+            return render(request, 'search_invigilator.html', {'form': form, 'records': records})
+    else:
+        form = InvigilatorForm
+    return render(request, 'search_invigilator.html', {'form': form})
+
+
+
 #CRUD INVIGILATOR========END
 
 
@@ -209,6 +225,46 @@ def Programme_Form(request):
         "form":form,
     }
     return render(request,"insert_program.html",context)
+
+
+def program_list(request):
+    title='List of Programmes' 
+    queryset = Degree.objects.all()
+    context={"title":title,
+            "queryset":queryset,
+        }
+    return render(request,"program_list.html",context)
+
+
+
+def update_program(request, id):
+    degree=Degree.objects.get(id=id) 
+    form=DegreeForm(request.POST or None,instance=degree)
+    if form.is_valid():
+            form.save()
+            messages.success(request,'Updated Successfully')
+            return redirect('program_list')
+    return render(request,'insert_program.html',{'form':form})
+
+
+def delete_program(request, id):
+    program = get_object_or_404(Degree, id=id)  # Fetch the student object by ID
+    if request.method == 'POST':
+        program.delete() 
+        messages.success(request,'Deleted Successfully')
+        return redirect('program_list')  # Redirect to a success page or another URL after deletion
+    # Handle GET request here if needed
+    return redirect('program_list')  # Redirect to a different URL after deletion or GET request
+
+
+
+
+
+
+
+
+
+
 
 #CRUD PROGRAMMES========END
 
@@ -239,7 +295,83 @@ def course_list(request):
 
 
 
+
+def update_course(request, id):
+    course=Module.objects.get(id=id) 
+    form=CourseForm(request.POST or None,instance=course)
+    if form.is_valid():
+            form.save()
+            messages.success(request,'Updated Successfully')
+            return redirect('course_list')
+    return render(request,'insert_course.html',{'form':form})
+
+
+def delete_course(request, id):
+    course = get_object_or_404(Module, id=id)  # Fetch the student object by ID
+    if request.method == 'POST':
+        course.delete() 
+        messages.success(request,'Deleted Successfully')
+        return redirect('course_list')  # Redirect to a success page or another URL after deletion
+    # Handle GET request here if needed
+    return redirect('course_list')  # Redirect to a different URL after deletion or GET request
+
+
+
+
 #CRUD COURSES========END
+
+
+#CRUD ROOM========START
+def Room_Form(request):
+    title='Add Users' 
+    form=RoomForm(request.POST or None)
+    if form.is_valid():
+        form.save()
+        form=RoomForm
+        messages.success(request,'successfully submitted')
+    context={
+        "title":title,
+        "form":form,
+    }
+    return render(request,"insert_room.html",context)
+
+
+def room_list(request):
+    title='List of Exam Venue' 
+    queryset = Room.objects.all()
+    context={"title":title,
+            "queryset":queryset,
+        }
+    return render(request,"room_list.html",context)
+
+def update_room(request, id):
+    room=Room.objects.get(id=id) 
+    form=RoomForm(request.POST or None,instance=room)
+    if form.is_valid():
+            form.save()
+            messages.success(request,'Updated Successfully')
+            return redirect('room_list')
+    return render(request,'insert_room.html',{'form':form})
+
+
+def delete_room(request, id):
+    room = get_object_or_404(Room, id=id)  # Fetch the student object by ID
+    if request.method == 'POST':
+        room.delete() 
+        messages.success(request,'Deleted Successfully')
+        return redirect('room_list')  # Redirect to a success page or another URL after deletion
+    # Handle GET request here if needed
+    return redirect('room_list')  # Redirect to a different URL after deletion or GET request
+
+
+
+
+
+
+
+
+
+#CRUD ROOM========END
 
 
 
@@ -277,22 +409,7 @@ def User_Form(request):
 #CRUD USERS========END
 
 
-#CRUD ROOM========START
-def Room_Form(request):
-    title='Add Users' 
-    form=RoomForm(request.POST or None)
-    if form.is_valid():
-        form.save()
-        form=RoomForm
-        messages.success(request,'successfully submitted')
-    context={
-        "title":title,
-        "form":form,
-    }
-    return render(request,"insert_room.html",context)
 
-
-#CRUD ROOM========END
 
 
 #EXAMINATION CRUD ++++START
@@ -318,6 +435,27 @@ def Timetable(request):
             "queryset":queryset,
         }
     return render(request,"timetable.html",context)
+
+
+
+def update_exam(request, id):
+    exam=Exam.objects.get(id=id) 
+    form=ExaForm(request.POST or None,instance=exam)
+    if form.is_valid():
+            form.save()
+            messages.success(request,'Updated Successfully')
+            return redirect('timetable')
+    return render(request,'create_timetable.html',{'form':form})
+
+
+def delete_exam(request, id):
+    exam = get_object_or_404(Exam ,id=id)  # Fetch the student object by ID
+    if request.method == 'POST':
+        exam.delete() 
+        messages.success(request,'Deleted Successfully')
+        return redirect('timetable')  # Redirect to a success page or another URL after deletion
+    # Handle GET request here if needed
+    return redirect('timetable')  # Redirect to a different URL after deletion or GET request
 
 
 

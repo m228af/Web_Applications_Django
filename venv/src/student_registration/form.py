@@ -37,7 +37,9 @@ class InvigilatorForm(forms.ModelForm):
 class ExaForm(forms.ModelForm):
     class Meta:
         model=Exam
-        fields="__all__"
+        fields = ['exam_date','exam_time','module_name','expected_candidates','room_name']
+    exam_time = forms.TimeField(widget=forms.TimeInput(attrs={'type': 'time'}))
+
 class UserForm(forms.ModelForm):
     class Meta:
         model=User
@@ -63,6 +65,14 @@ class DegreeForm(forms.ModelForm):
 
 
 
+
 class SearchForm(forms.Form):
-    search_query = forms.CharField(max_length=100, label='Search for Student')
+    search_query = forms.CharField(label='Search', max_length=100)
+
+
+class SearchInvigilator(forms.Form):
+    search_query = forms.CharField(label='Search', max_length=100)
+
+
+
 

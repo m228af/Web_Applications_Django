@@ -92,11 +92,6 @@
               <i class="bi bi-circle"></i><span>Update Courses</span>
             </a>
           </li>
-          <li>
-            <a href="charts-echarts.html">
-              <i class="bi bi-circle"></i><span>Courses on Offer</span>
-            </a>
-          </li>
         </ul>
       </li><!-- End Charts Nav -->
 
@@ -114,15 +109,11 @@
             </a>
           </li>
           <li>
-            <a href="charts-apexcharts.html">
+            <a href="{% url 'program_list'%}">
               <i class="bi bi-circle"></i><span>Update Programme</span>
             </a>
           </li>
-          <li>
-            <a href="charts-echarts.html">
-              <i class="bi bi-circle"></i><span>Programmes on Offer</span>
-            </a>
-          </li>
+        
         </ul>
       </li><!-- End Charts Nav -->
 
@@ -144,7 +135,7 @@
             </a>
           </li>
           <li>
-            <a href="icons-remix.html">
+            <a href="{%url 'room_list' %}">
               <i class="bi bi-circle"></i><span>Update room</span>
             </a>
           </li>
@@ -164,12 +155,12 @@
         </a>
         <ul id="reports" class="nav-content collapse " data-bs-parent="#sidebar-nav">
           <li>
-            <a href="icons-bootstrap.html">
+            <a href="{% url 'student_list'%}">
               <i class="bi bi-circle"></i><span>Registered Students</span>
             </a>
           </li>
           <li>
-            <a href="icons-remix.html">
+            <a href="{% url 'invigilator_list'%}">
               <i class="bi bi-circle"></i><span>Invigilators</span>
             </a>
           </li>
@@ -179,7 +170,7 @@
             </a>
           </li>
           <li>
-            <a href="icons-boxicons.html">
+            <a href="{% url 'room_list'%}">
               <i class="bi bi-circle"></i><span>List of rooms</span>
             </a>
           </li>

@@ -1,5 +1,6 @@
 from django.db import models
 
+
 # Create your models here.
 
 class Gender(models.TextChoices):
@@ -32,7 +33,7 @@ class Module(models.Model):
     module_name=models.CharField("COURSE NAME",max_length=255,unique=True)
     deg_code=models.ForeignKey(Degree, on_delete=models.CASCADE)
     def __str__(self):
-        return self.module_code
+        return self.module_name
     
 
 
@@ -60,6 +61,10 @@ class Student(models.Model):
     semester=models.IntegerField("SEMESTER")
     def __str__(self):
         return self.student_id
+    
+
+
+
 
     
 
@@ -87,7 +92,7 @@ class Room(models.Model):
 
 class Exam(models.Model):
     exam_date=models.DateField(auto_now_add=False, auto_now=False, blank=False,null=False)
-    exam_time=models.CharField(max_length=25)
+    exam_time=models.TimeField()
     module_name=models.ForeignKey(Module,on_delete=models.CASCADE)
     expected_candidates=models.IntegerField()
     room_name=models.ForeignKey(Room,on_delete=models.CASCADE)
