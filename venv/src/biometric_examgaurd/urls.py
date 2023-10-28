@@ -16,11 +16,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path,include
-from student_registration.views import Home
+from student_registration.views import *
 # from student_registration.views import simple_upload
 
 urlpatterns = [
-    path('',Home,name='index'),
+    path('',access_control,name='access_control'),
     path('admin/', admin.site.urls),
     path('biometric_examguard/',include('student_registration.urls')),
     path('',include("django.contrib.auth.urls")),

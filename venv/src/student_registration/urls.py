@@ -6,9 +6,13 @@ from student_registration import views
 
 urlpatterns=[
 path('admin/', admin.site.urls),
+# path('',views.access_control),
 path('index/', views.Home, name='home'),
 path('signup/', views.signup,name='signup'),
 path('dashboard/', views.Dashboard, name='dashboard'),
+
+
+path('api/',views.HelloApiView.as_view()),
 
 #STUDENT CRUD OPERATION URLS
 
@@ -57,6 +61,10 @@ path('create_timetable/',views.Exam_Form, name='create_timetable'),
 path('timetable/',views.Timetable, name='timetable'),
 path('timetable<int:id>/',views.update_exam,name='update_exam'),
 path('delete_exam<int:id>/', views.delete_exam, name='delete_exam'),
+
+#Attendance
+path('examattendance/',views.get_attendance,name='exam_attendance'),
+
 
 
 

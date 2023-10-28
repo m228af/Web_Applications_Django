@@ -17,11 +17,13 @@
               {% if messages %}
                     {%for message in messages%}
                     <p
-                    class="alert-success"
+                    class="alert-success text-center p-2"
                     id="success-message"
                     role="alert"
                     style="display: none;"
                     >
+                    <i class="bi bi-check success"></i>
+
                     {{message}}
                     </p>
                     {%endfor %}
@@ -104,7 +106,7 @@
                                             >Delete</button>
                                             <!-- Modal -->
                                             <div
-                                                class="modal fade bg-light"
+                                                class="modal bg-light"
                                                 id="staticBackdrop"
                                                 data-bs-backdrop="static"
                                                 data-bs-keyboard="false"
@@ -112,7 +114,7 @@
                                                 aria-labelledby="staticBackdropLabel"
                                                 aria-hidden="true"
                                             >
-                                                <div class="modal-dialog">
+                                                <div class="modal-dialog p-5">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
                                                             <button
@@ -123,7 +125,8 @@
                                                             ></button>
                                                         </div>
                                                         <div class="modal-body" >
-                                                            <p>Are you sure you want to delete this record? This action cannot be reversed</p>
+
+                                                            <p>Are you sure you want to delete this record <i class="bi bi-question success border"></i> This action cannot be reversed</p>
                                                         </div>
                                                         <div class="modal-footer">
                                                             <form action="{%url 'delete_student' instance.id%}" method="post" autocomplete="off">

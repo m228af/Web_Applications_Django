@@ -59,6 +59,9 @@ class Student(models.Model):
     user_role=models.ForeignKey(Role,on_delete=models.CASCADE)
     student_level=models.IntegerField("ACADEMIC LEVEL")
     semester=models.IntegerField("SEMESTER")
+    fprint1=models.CharField(max_length=100,blank=True,null=True)
+    fprint1=models.CharField(max_length=100,blank=True,null=True)
+
     def __str__(self):
         return self.student_id
     
@@ -93,18 +96,29 @@ class Room(models.Model):
 class Exam(models.Model):
     exam_date=models.DateField(auto_now_add=False, auto_now=False, blank=False,null=False)
     exam_time=models.TimeField()
-    module_name=models.ForeignKey(Module,on_delete=models.CASCADE)
+    module_name=models.ForeignKey(Module,on_delete=models.CASCADE,unique=True)
     expected_candidates=models.IntegerField()
     room_name=models.ForeignKey(Room,on_delete=models.CASCADE)
     def __str__(self):
         return self.exam_date
 
-# class RegisterStudent(models.Model):
-#     student_id=models.ForeignKey(Student,on_delete=models.CASCADE)
-#     reg_status=models.CharField(max_length=20)
-#     student_level=models.ForeignKey(Student,on_delete=models.CASCADE)
-#     semester=models.ForeignKey(Student,on_delete=models.CASCADE)
+class RegisterStudent(models.Model):
+    student_id=models.ForeignKey(Student,on_delete=models.CASCADE)
+    reg_status=models.CharField(max_length=20)
+    reg_date=models.DateField(auto_now_add=False, auto_now=True, blank=False,null=False)
+
+
+class Attendnace(models.Model):
+    student_id=models.ForeignKey(Student,on_delete=models.CASCADE)
+    clock_in=models.DateTimeField(auto_now_add=False, auto_now=True, blank=False,null=False)
+    clock_out=models.DateTimeField(auto_now_add=False, auto_now=True, blank=False,null=False)
+
     
+    def __str__(self):
+        return str(self.student_id)
+    
+    
+
 
 
     

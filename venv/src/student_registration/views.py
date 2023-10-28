@@ -8,11 +8,63 @@ from openpyxl import load_workbook
 from .resources import StudentResource
 from tablib import Dataset
 
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from . import serializers
+from rest_framework import status
+
+"""APIs."""
+class HelloApiView(APIView):
+
+    serializer_class=serializers.HelloSerializer
+    def get(self,request,format=None):
+        an_apiview=[
+
+            'Hey Programmer',
+            'Thanks for Trying',
+            'Everything is gona be ok'
+        ]
+        return Response({'message':'Hello Anesu','an_apiview':an_apiview})
+    
+    def post(self,request):
+        serializer=serializers.HelloSerializer(data=request.data)
+
+        if serializer.is_valid():
+            name=serializer.data.get('name')
+            message='Hello {0}'.format(name)
+            return Response({'message':message})
+        else:
+            return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST) 
+
+    def put(self,request,pk=None):
+
+        return Response({'method':'put'})
+    
+
+    def patch(self,request,pk=None):
+
+        return Response({'method':'patch'})
+    
+    def delete(self,request,pk=None):
+
+        return Response({'method':'delete'})
 
 
 
 
 #Login Page
+
+def access_control(request):
+    form=AttendanceForm(request.POST or None)
+    if form.is_valid():
+        form.save()
+        form=AttendanceForm
+        # messages.success(request,'successfully submitted')
+    context={
+        "form":form,
+    }
+    return render(request,"access_control.html",context)
+
 def Home(request):
     title='Biometric ExamGuard' 
     context={
@@ -40,7 +92,8 @@ def Dashboard(request):
     context={
        "student_count":student_count,
        "exam_count":exam_count,
-       "invigilator_count":invigilator_count
+       "invigilator_count":invigilator_count,
+       "today":today
     }
     return render(request,"dashboard.html",context)
 
@@ -63,8 +116,12 @@ def Student_Form(request):
 def student_list(request):
     title='Students Table' 
     queryset = Student.objects.all()
+    student_count = Student.objects.count()
+
     context={"title":title,
             "queryset":queryset,
+            "student_count":student_count
+
         }
     return render(request,"student_list.html",context)
 
@@ -133,6 +190,20 @@ def simple_upload(request):
             value.save()
         messages.success(request,'imported successfully')
         return student_list(request)
+    
+
+
+def get_attendance(request):
+    
+    title='Attendance Table' 
+    queryset=Attendnace.objects.all()
+    context={"title":title,
+            "queryset":queryset,
+        }
+    return render(request,"attendance.html",context)
+
+
+
 
 
 
@@ -315,6 +386,11 @@ def delete_course(request, id):
     # Handle GET request here if needed
     return redirect('course_list')  # Redirect to a different URL after deletion or GET request
 
+
+
+
+
+#Assign courses for students
 
 
 
