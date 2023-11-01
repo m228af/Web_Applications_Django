@@ -20,8 +20,9 @@ from student_registration.views import *
 # from student_registration.views import simple_upload
 
 urlpatterns = [
-    path('',access_control,name='access_control'),
+    path('',Attendance_Form,name='access_control'),
     path('admin/', admin.site.urls),
+    path('myapp/', include('myapp.urls')),
     path('biometric_examguard/',include('student_registration.urls')),
     path('',include("django.contrib.auth.urls")),
     path("__debug__/", include("debug_toolbar.urls")),

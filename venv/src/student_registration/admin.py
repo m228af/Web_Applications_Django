@@ -47,7 +47,7 @@ admin.site.register(Invigilator)
 admin.site.register(Exam)
 admin.site.register(Degree)
 admin.site.register(Module)
-admin.site.register(RegisterStudent)
+# admin.site.register(StudentCourses)
 admin.site.register(Attendnace)
 
 

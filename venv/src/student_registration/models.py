@@ -31,7 +31,10 @@ class Degree(models.Model):
 class Module(models.Model):
     module_code=models.CharField("COURSE CODE",max_length=255,unique=True)
     module_name=models.CharField("COURSE NAME",max_length=255,unique=True)
+    academic_level=models.IntegerField()
+    semester=models.IntegerField()
     deg_code=models.ForeignKey(Degree, on_delete=models.CASCADE)
+    
     def __str__(self):
         return self.module_name
     
@@ -102,20 +105,28 @@ class Exam(models.Model):
     def __str__(self):
         return self.exam_date
 
-class RegisterStudent(models.Model):
-    student_id=models.ForeignKey(Student,on_delete=models.CASCADE)
-    reg_status=models.CharField(max_length=20)
-    reg_date=models.DateField(auto_now_add=False, auto_now=True, blank=False,null=False)
+
+
+
+
+class StatusChoice(models.TextChoices):
+    Male='Present'
+    Female='Absent'
 
 
 class Attendnace(models.Model):
     student_id=models.ForeignKey(Student,on_delete=models.CASCADE)
     clock_in=models.DateTimeField(auto_now_add=False, auto_now=True, blank=False,null=False)
-    clock_out=models.DateTimeField(auto_now_add=False, auto_now=True, blank=False,null=False)
-
-    
+    clock_out=models.DateTimeField(auto_now_add=False, auto_now=True, blank=True,null=False)
+    status_choice= (
+        ('Present','Present'),
+        ('Absent','Absent'),
+    )
+    status=models.CharField("Status",max_length=10, choices = status_choice,default="Absent")
+    seat_number=models.IntegerField(unique=True)
     def __str__(self):
         return str(self.student_id)
+        
     
     
 

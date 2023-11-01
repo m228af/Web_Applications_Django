@@ -66,19 +66,23 @@
                         <tr class="bg-warning">
                             <th>COURSE CODE</th>
                             <th>COURSE NAME</th>
+                            <th>LEVEL</th>
+                            <th>SEMESTER</th>
                             <th>PROGRAM</th>
                             <th>Action</th>
                         </tr>
                         {% for instance in queryset %}
                         <tr>
-                            <td>{{instance.module_code}}</td>
-                            <td>{{instance.module_name}}</td>
-                            <td>{{instance.deg_code}}</td>
-                            <td class="d-flex" width="100%">
+                            <td class="border">{{instance.module_code}}</td>
+                            <td class="border">{{instance.module_name}}</td>
+                            <td class="border">{{instance.academic_level}}</td>
+                            <td class="border">{{instance.semester}}</td>
+                            <td class="border">{{instance.deg_code}}</td>
+                            <td class="d-flex border" width="100%">
                               <form action="" method="post">
                                 {%csrf_token%}
                                 <button class="btn btn-success" name="course_code">
-                                    <a href="{% url 'update_room' instance.id%}" class="text-light">Edit</a>
+                                    <a href="{% url 'update_course' instance.id%}" class="text-light">Edit</a>
                                 </button>
                                 &nbsp;&nbsp;&nbsp;
                             </form>

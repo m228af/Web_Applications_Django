@@ -13,6 +13,35 @@ from rest_framework.response import Response
 from . import serializers
 from rest_framework import status
 
+
+
+
+
+
+
+
+
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+
+@csrf_exempt
+def handle_http_request(request):
+    if request.method == 'GET':
+        # Process GET request data
+        data = {'message': 'GET request received'}
+    elif request.method == 'POST':
+        # Process POST request data
+        data = {'message': 'POST request received'}
+    else:
+        data = {'message': 'Unsupported request method'}
+    return JsonResponse(data)
+
+
+
+
+
+
+
 """APIs."""
 class HelloApiView(APIView):
 
@@ -55,15 +84,14 @@ class HelloApiView(APIView):
 #Login Page
 
 def access_control(request):
-    form=AttendanceForm(request.POST or None)
-    if form.is_valid():
-        form.save()
-        form=AttendanceForm
-        # messages.success(request,'successfully submitted')
-    context={
-        "form":form,
-    }
-    return render(request,"access_control.html",context)
+    if request.method=='POST':
+        if request.POST.get('student_num'):
+            post=Attendnace()
+            post.student_id=request.POST.get('student_num')
+            post.save()    
+    return render(request,"access_control.html")
+
+
 
 def Home(request):
     title='Biometric ExamGuard' 
@@ -149,16 +177,35 @@ def delete_student(request, id):
     return redirect('student_list')  # Redirect to a different URL after deletion or GET request
 
 
+
+from django.shortcuts import render
+from .models import Student, Module
+
 def search_student(request):
-    if request.method == 'POST':
-        form = SearchForm(request.POST or None)
-        if form.is_valid():
-            search_query = form.cleaned_data['search_query']
-            records = Student.objects.filter(student_id__icontains=search_query)
-            return render(request, 'search.html', {'form': form, 'records': records})
-    else:
-        form = StudentForm
-    return render(request, 'search.html', {'form': form})
+    form = SearchForm(request.POST or None)
+    if request.method == 'POST' and form.is_valid():
+        search_query = form.cleaned_data['search_query']
+        records = Student.objects.filter(student_id__icontains=search_query)
+        context = {"form": form, "records": records}
+        if records:
+            student = records[0]
+            academic_level = student.student_level
+            semester = student.semester
+            student_program = student.deg_code  # Assuming deg_code points to the program
+            courses = Module.objects.filter(academic_level=academic_level, semester=semester, deg_code=student_program)
+            context['student'] = student
+            context['courses'] = courses
+        return render(request, 'search.html', context)
+    return render(request, 'search.html', {"form": form})
+
+
+
+
+
+
+
+
+
 
 
 
@@ -194,7 +241,6 @@ def simple_upload(request):
 
 
 def get_attendance(request):
-    
     title='Attendance Table' 
     queryset=Attendnace.objects.all()
     context={"title":title,
@@ -208,7 +254,22 @@ def get_attendance(request):
 
 
 
+
+
 #CRUD STUDENT========END
+
+def Attendance_Form(request):
+    form=AttendanceForm(request.POST or None)
+    stu=Student.objects.filter(deg_code=1)
+    if form.is_valid():
+        form.save()
+        form=AttendanceForm
+        messages.success(request,'successfully submitted')
+    context={
+        
+        "form":form,
+    }
+    return render(request,"access_control.html",context)
 
 
 

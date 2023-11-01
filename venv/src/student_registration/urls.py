@@ -1,18 +1,22 @@
 from django.contrib import admin
 from django.urls import path
 from student_registration import views
+from .views import handle_http_request
 
 
 
 urlpatterns=[
 path('admin/', admin.site.urls),
-# path('',views.access_control),
+path('',views.Attendance_Form),
 path('index/', views.Home, name='home'),
 path('signup/', views.signup,name='signup'),
 path('dashboard/', views.Dashboard, name='dashboard'),
 
 
 path('api/',views.HelloApiView.as_view()),
+path('api/endpoint/', handle_http_request, name='handle_http_request'),
+
+
 
 #STUDENT CRUD OPERATION URLS
 
@@ -23,8 +27,9 @@ path('delete_student<int:id>/', views.delete_student, name='delete_student'),
 path('import_student/', views.simple_upload, name='import_student'),
 path('search/', views.search_student, name='search'),
 path('student_list/',views.student_list,name='student_list'),
+# ss
 
-
+# path('courses/<str:student_id>/', views.courses_by_academic_level, name='available_courses'),
 #INVIGILATOR CRUD OPERATION
 path('insert_invigilator/',views.Invigilator_Form, name='insert_invigilator'),
 path('invigilator_list<int:id>',views.update_invigilator,name='update_invigilator'),

@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     "crispy_bootstrap5",
     "import_export",
     "rest_framework",
+    'myapp',
 
 
 ]
@@ -146,5 +147,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_REDIRECT_URL='dashboard'
 
-ALLOWED_HOSTS = ['127.0.0.1','192.168.41.215', 'localhost']
+ALLOWED_HOSTS = ['127.0.0.1','192.168.253.215', 'localhost']
 
