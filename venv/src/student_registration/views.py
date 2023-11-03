@@ -15,6 +15,21 @@ from rest_framework import status
 
 
 
+from django.utils import timezone
+from datetime import timedelta
+from django.contrib import messages
+
+
+
+
+from django.http import HttpResponse
+from openpyxl import Workbook
+from openpyxl.utils.dataframe import dataframe_to_rows
+from django.shortcuts import render
+from .models import Attendance  # Import the Attendance model
+
+
+
 
 
 
@@ -86,7 +101,7 @@ class HelloApiView(APIView):
 def access_control(request):
     if request.method=='POST':
         if request.POST.get('student_num'):
-            post=Attendnace()
+            post=Attendance()
             post.student_id=request.POST.get('student_num')
             post.save()    
     return render(request,"access_control.html")
@@ -206,7 +221,19 @@ def search_student(request):
 
 
 
-
+def display_attendance_list(request, course_name):
+    course = Module.objects.get(course_name=course_name)  # Assuming you have a course name in the URL or as a parameter
+    attended_students = Student.objects.filter(attendance__course=course)
+    academic_level = course.academic_level
+    degree_program = course.deg_code
+    all_students = Student.objects.filter(student_level=academic_level, deg_code=degree_program)
+    not_attended_students = all_students.exclude(id__in=attended_students.values_list('id', flat=True))
+    context = {
+        'attended_students': attended_students,
+        'not_attended_students': not_attended_students,
+        'course_name': course_name,
+    }
+    return render(request, 'attendance.html', context)
 
 
 ##Upload CSV Files as alternative to manual data entry on the system
@@ -240,16 +267,45 @@ def simple_upload(request):
     
 
 
-def get_attendance(request):
-    title='Attendance Table' 
-    queryset=Attendnace.objects.all()
-    context={"title":title,
-            "queryset":queryset,
-        }
-    return render(request,"attendance.html",context)
 
 
 
+from .models import Student, Module
+
+def search_student_by_course(request):
+    form = SearchStudents(request.POST or None)
+    if request.method == 'POST' and form.is_valid():
+        course_code_str = form.cleaned_data['module_code']  # Assuming course_code is a string representing the course code
+        # Find the corresponding course object based on the course code
+        try:
+            course_code = Module.objects.get(course_code=course_code_str)
+        except Module.DoesNotExist:
+            # Handle the case where the course code does not exist
+            course_code = None
+
+        if course_code:
+            # Filter students based on the course's academic level, semester, and program
+            students = Student.objects.filter(
+                academic_level=course_code.academic_level,
+                semester=course_code.semester,
+                deg_code=course_code.deg_code  # Assuming deg_code points to the program
+            )
+
+            # Fetch all courses related to the provided academic level, semester, and program
+            courses = Module.objects.filter(
+                academic_level=course_code.academic_level,
+                semester=course_code.semester,
+                deg_code=course_code.deg_code
+            )
+        else:
+            students = []
+            courses = []
+
+        context = {"form": form, "students": students, "courses": courses}
+
+        return render(request, 'search_by_course.html', context)
+
+    return render(request, 'search_by_course.html', {"form": form})
 
 
 
@@ -257,6 +313,88 @@ def get_attendance(request):
 
 
 #CRUD STUDENT========END
+
+
+
+#Attendance 
+
+
+from django.utils import timezone
+from datetime import datetime
+
+def clock_in(request):
+    if request.method == 'POST':
+        student_id = request.POST.get('student_id')
+        action = request.POST.get('action')
+        form = AttendanceForm()
+        try:
+            student = Student.objects.get(student_id=student_id)
+            if action == 'Clock In':
+                # Check if the student is already clocked in
+                attendance = Attendance.objects.filter(student=student, time_out__isnull=True).first()
+                if attendance:
+                    messages.warning(request, 'You are already clocked in for a course.')
+                else:
+                    # Get the current date
+                    current_date = timezone.now().date()
+                    
+                    # Filter Module instances that match the student's degree, academic level, and semester
+                    matching_courses = Module.objects.filter(
+                        deg_code=student.deg_code,
+                        academic_level=student.student_level,
+                        semester=student.semester
+                    )
+
+                    # Iterate through matching courses to check for attendance
+                    for course in matching_courses:
+                        # Check if attendance exists for the student in the current course and date
+                        existing_attendance = Attendance.objects.filter(student=student, module=course, time_in__date=current_date).first()
+                        
+                        if not existing_attendance:
+                            # Create a new attendance record for the student in this course
+                            attendance = Attendance(student=student, module=course, time_in=timezone.now(), status="Present")
+                            attendance.save()
+                            messages.success(request, 'Clock In successful for course.')                    
+                    # If all matching courses already have attendance records
+                    messages.warning(request, 'No available courses to clock in for this student on this date.')
+        except Student.DoesNotExist:
+            messages.warning(request, 'Student does not exist.')
+        return redirect('clock_in')
+    return render(request, 'clock_in.html')
+
+
+
+
+
+
+def clock_out(request):
+    if request.method == 'POST':
+        student_id = request.POST.get('student_id')
+        try:
+            student = Student.objects.get(student_id=student_id)
+            try:
+                attendance = Attendance.objects.get(student=student, time_out__isnull=True)
+                attendance.time_out = timezone.now()
+                attendance.save()
+                messages.success(request, 'Clock Out successful for course.')
+            except Attendance.DoesNotExist:
+                messages.warning(request, 'You cannot clock out without a previous clock-in.')
+        except Student.DoesNotExist:
+            messages.warning(request, 'Student does not exist.')
+        return redirect('clock_out')
+    return render(request, 'clock_out.html')
+
+
+def view_attendance(request):
+    # Retrieve attendance records from the database
+    attendance_records = Attendance.objects.select_related('student')
+
+    # Pass the attendance records to the template
+    context = {
+        'attendance_records': attendance_records
+    }
+
+    return render(request, 'attendance.html', context)
 
 def Attendance_Form(request):
     form=AttendanceForm(request.POST or None)
@@ -269,9 +407,37 @@ def Attendance_Form(request):
         
         "form":form,
     }
-    return render(request,"access_control.html",context)
+    return render(request,"preloader.html",context)
 
 
+
+def export_attendance_to_excel(request):
+    # Retrieve attendance data from your model
+    attendance_data = Attendance.objects.all()
+
+    # Create an Excel workbook and add data to it
+    workbook = Workbook()
+    sheet = workbook.active
+
+    # Define the headers
+    sheet.append(["Student ID", "Time In", "Time Out", "Module", "Status"])
+
+    # Add data from the Attendance model
+    for entry in attendance_data:
+        # Convert datetime objects to strings without timezone information
+        time_in = entry.time_in.strftime('%Y-%m-%d %H:%M:%S')
+        time_out = entry.time_out.strftime('%Y-%m-%d %H:%M:%S') if entry.time_out else ''
+        
+        sheet.append([entry.student.student_id, time_in, time_out, entry.module.module_name, entry.status])
+
+    # Create a response for downloading the Excel file
+    response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    response['Content-Disposition'] = 'attachment; filename=attendance.xlsx'
+
+    # Save the workbook content to the response
+    workbook.save(response)
+
+    return response
 
 
 #CRUD INVIGILATOR========START

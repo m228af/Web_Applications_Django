@@ -83,6 +83,7 @@
                                         <th>PROGRAM</th>
                                         <th>Action</th>
                                     </tr>
+                                    {% if queryset %}
                                     {% for instance in queryset %}
                                     <tr>
                                         <!-- <td>{{forloop.counter}}</td> -->
@@ -146,8 +147,17 @@
                                         </td>
                                     </tr>
                                     {% endfor %}
+
+                                    {%else %}
+                                   <tr>
+                                    <td class="mx-auto text-center border-o">No data available</td>
+                                   </tr>
+
+                                 
                                 </table>
-                            </table>
+
+
+                            {%endif%}
                         </div>
                         {% endblock %}
                     </div>

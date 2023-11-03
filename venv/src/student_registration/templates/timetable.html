@@ -59,6 +59,7 @@
                             <th>CANDIDATES</th>
                             <th>VENUE</th>
                             <th>Action</th> 
+                            <th></th> 
                         </tr>
                         {% for instance in queryset %}
                         <tr>
@@ -66,15 +67,19 @@
                             <td class="bg-light border">{{instance.exam_time}}</td>
                             <td class="bg-light border">{{instance.module_name}}</td>
                             <td class="bg-light border">{{instance.expected_candidates}}</td>
-                            <td class="bg-light border" >{{instance.room_name}}</td> 
-                            <td class="d-flex bg-light border" width="100%">
+                            <td class="bg-light border" >{{instance.room_name}}</td>
+                            <td class="bg-light border">
                               <form action="" method="post">
-                                {%csrf_token%}
-                                <button class="btn btn-success" name="course_code">
-                                    <a href="{% url 'update_exam' instance.id%}" class="text-light">Edit</a>
-                                </button>
-                                &nbsp;&nbsp;&nbsp;
-                            </form>
+                              {%csrf_token%}
+                              <button class="btn btn-success" name="course_code">
+                                  <a href="{% url 'update_exam' instance.id%}" class="text-light">Edit</a>
+                              </button>
+                              &nbsp;&nbsp;&nbsp;
+                          </form>
+                        </td>
+
+                            <td class="d-flex bg-light border" width="100%">
+                              
                             <button
                                                 class="btn btn-danger"
                                                 type="submit"

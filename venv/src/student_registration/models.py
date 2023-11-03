@@ -64,7 +64,6 @@ class Student(models.Model):
     semester=models.IntegerField("SEMESTER")
     fprint1=models.CharField(max_length=100,blank=True,null=True)
     fprint1=models.CharField(max_length=100,blank=True,null=True)
-
     def __str__(self):
         return self.student_id
     
@@ -114,18 +113,12 @@ class StatusChoice(models.TextChoices):
     Female='Absent'
 
 
-class Attendnace(models.Model):
-    student_id=models.ForeignKey(Student,on_delete=models.CASCADE)
-    clock_in=models.DateTimeField(auto_now_add=False, auto_now=True, blank=False,null=False)
-    clock_out=models.DateTimeField(auto_now_add=False, auto_now=True, blank=True,null=False)
-    status_choice= (
-        ('Present','Present'),
-        ('Absent','Absent'),
-    )
-    status=models.CharField("Status",max_length=10, choices = status_choice,default="Absent")
-    seat_number=models.IntegerField(unique=True)
-    def __str__(self):
-        return str(self.student_id)
+class Attendance(models.Model):
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    time_in = models.DateTimeField(null=True,auto_now_add=True, blank=True)
+    time_out = models.DateTimeField(null=True,blank=True)
+    module=models.ForeignKey(Module, on_delete=models.CASCADE)
+    status=models.TextField()
         
     
     

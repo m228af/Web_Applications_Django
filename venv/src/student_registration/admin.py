@@ -48,6 +48,6 @@ admin.site.register(Exam)
 admin.site.register(Degree)
 admin.site.register(Module)
 # admin.site.register(StudentCourses)
-admin.site.register(Attendnace)
+admin.site.register(Attendance)
 
 

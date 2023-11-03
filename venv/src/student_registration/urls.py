@@ -68,28 +68,10 @@ path('timetable<int:id>/',views.update_exam,name='update_exam'),
 path('delete_exam<int:id>/', views.delete_exam, name='delete_exam'),
 
 #Attendance
-path('examattendance/',views.get_attendance,name='exam_attendance'),
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+path('clock_in/',views.clock_in,name='clock_in'),
+path('clock_out/',views.clock_out,name='clock_out'),
+path('view_attendance/',views.view_attendance, name='view_attendance'),
+path('attendance/<str:course_name>/', views.display_attendance_list, name='attendance_list'),
 
 
 
@@ -100,4 +82,35 @@ path('insert_user/',views.User_Form, name='insert_user'),
 
 
 
+
+path('search-by-course/', views.search_student_by_course, name='search_student_by_course'),
+
+
+path('export-attendance-to-excel/', views.export_attendance_to_excel, name='export_attendance_to_excel'),
 ]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

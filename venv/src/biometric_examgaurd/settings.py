@@ -42,7 +42,6 @@ INSTALLED_APPS = [
     "crispy_bootstrap5",
     "import_export",
     "rest_framework",
-    'myapp',
 
 
 ]

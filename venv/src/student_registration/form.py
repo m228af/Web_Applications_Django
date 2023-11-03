@@ -23,7 +23,7 @@ class StudentForm(forms.ModelForm):
     #     self.fields['student_id'].required =False
 class AttendanceForm(forms.ModelForm):
     class Meta:
-        model=Attendnace
+        model=Attendance
         fields="__all__"
 
 
@@ -73,6 +73,9 @@ class DegreeForm(forms.ModelForm):
 
 class SearchForm(forms.Form):
     search_query = forms.CharField(label='Search', max_length=100)
+
+class SearchStudents(forms.Form):
+    module_code=forms.CharField(max_length=100)
 
 
 class SearchInvigilator(forms.Form):
