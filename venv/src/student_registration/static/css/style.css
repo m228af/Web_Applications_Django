@@ -311,7 +311,7 @@ h6 {
 .breadcrumb {
   font-size: 14px;
   font-family: "Nunito", sans-serif;
-  color: #899bbd;
+  color: maroon;
   font-weight: 600;
 }
 
@@ -324,8 +324,8 @@ h6 {
   color: #51678f;
 }
 
-.breadcrumb .breadcrumb-item::before {
-  color: #899bbd;
+.breadcrumb .breadcrumb-item {
+  color: maroon;
 }
 
 .breadcrumb .active {
@@ -354,6 +354,7 @@ h6 {
   color: #4154f1;
   border-bottom: 2px solid #4154f1;
 }
+
 
 /*--------------------------------------------------------------
 # Header
@@ -688,7 +689,7 @@ h6 {
   align-items: center;
   font-size: 15px;
   font-weight: 600;
-  color: #4154f1;
+  color:maroon;
   transition: 0.3;
   background: #f6f9ff;
   padding: 10px 15px;
@@ -698,11 +699,11 @@ h6 {
 .sidebar-nav .nav-link i {
   font-size: 16px;
   margin-right: 10px;
-  color: #4154f1;
+  color: maroon;
 }
 
 .sidebar-nav .nav-link.collapsed {
-  color: #012970;
+  color:maroon;
   background: #fff;
 }
 
@@ -716,7 +717,7 @@ h6 {
 }
 
 .sidebar-nav .nav-link:hover i {
-  color: #4154f1;
+  color: maroon;
 }
 
 .sidebar-nav .nav-link .bi-chevron-down {

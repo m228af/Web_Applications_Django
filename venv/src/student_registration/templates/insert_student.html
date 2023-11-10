@@ -47,13 +47,11 @@
     <div class="pagetitle">
       <nav>
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="{% url 'dashboard'%}" style="color: orangered;text-decoration: underline;">Home</a></li>
-          <li class="breadcrumb-item active">Dashboard</li>
+          <li class="breadcrumb-item"><a href="{% url 'dashboard'%}" style="color: maroon;text-decoration: underline;">Home</a></li>
+          <li class="breadcrumb-item active">Add new Student</li>
         </ol>
-      </nav>
-      <h1>Register New Student</h1>
-     
-    </div><!-- End Page Title -->
+      </nav>     
+    </div><!-- End Page Title --> <br><br>
 
     <section class="section dashboard">
       <div class="row">
@@ -64,22 +62,26 @@
 
             <!-- Customers Card -->
             <div class="container">
+              {% if messages %}
+              {%for message in messages%}
+              <p
+              class="alert-success text-center p-2"
+              id="success-message"
+              role="alert"
+              style="display: none;"
+              >
+              <i class="bi bi-check success"></i>
 
-                {% if messages %}
-                <div class="alert alert-success" id="success-message" role="alert" style="display: none;">
-
-                  {% for message in messages %}
-                    <p>{{ message }}</p>
-                  {% endfor %}
-                </div>
-
-                {% endif %}
+              {{message}}
+              </p>
+              {%endfor %}
+              {% endif %}
 
               <form method="post" id="StudentForm" autocomplete="off">
                 {% csrf_token %}
                 <div class="container-fluid">
                   {{ form|crispy }}
-                  <input type="submit" value="Submit" class="btn btn-success">
+                  <input type="submit" value="Submit" class="btn text-light" style="background-color: maroon;">
                 </div>
               </form>
 

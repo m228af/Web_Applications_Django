@@ -77,7 +77,6 @@ path('attendance/<str:course_name>/', views.display_attendance_list, name='atten
 
 # path('display_students/', views.count_students, name='count_students'),
 
-path('insert_role/',views.Role_Form, name='insert_role'),
 path('insert_user/',views.User_Form, name='insert_user'),
 
 
@@ -87,6 +86,17 @@ path('search-by-course/', views.search_student_by_course, name='search_student_b
 
 
 path('export-attendance-to-excel/', views.export_attendance_to_excel, name='export_attendance_to_excel'),
+
+path('course/<str:module_code>/', views.expected_students, name='expected_students_for_course'),
+
+ 
+path('search-by-module/', views.search_students_by_module, name='search_students_by_module'),
+
+
+path('api/enroll-fingerprint/', views.enroll_fingerprint, name='enroll_fingerprint'),
+
+
+
 ]
 
 

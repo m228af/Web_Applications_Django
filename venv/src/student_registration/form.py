@@ -50,10 +50,10 @@ class UserForm(forms.ModelForm):
         model=User
         fields="__all__"
 
-class RoleForm(forms.ModelForm):
-    class Meta:
-        model=Role
-        fields="__all__"
+# class RoleForm(forms.ModelForm):
+#     class Meta:
+#         model=Role
+#         fields="__all__"
 
 
 class RoomForm(forms.ModelForm):
@@ -76,6 +76,11 @@ class SearchForm(forms.Form):
 
 class SearchStudents(forms.Form):
     module_code=forms.CharField(max_length=100)
+    
+
+class ModuleSearchForm(forms.Form):
+    module_code = forms.CharField(label="Course Code", max_length=10)
+
 
 
 class SearchInvigilator(forms.Form):

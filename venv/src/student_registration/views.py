@@ -7,35 +7,18 @@ from django.http import HttpResponse
 from openpyxl import load_workbook
 from .resources import StudentResource
 from tablib import Dataset
-
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from . import serializers
 from rest_framework import status
-
-
-
 from django.utils import timezone
 from datetime import timedelta
 from django.contrib import messages
-
-
-
-
 from django.http import HttpResponse
 from openpyxl import Workbook
 from openpyxl.utils.dataframe import dataframe_to_rows
 from django.shortcuts import render
 from .models import Attendance  # Import the Attendance model
-
-
-
-
-
-
-
-
-
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
@@ -57,13 +40,43 @@ def handle_http_request(request):
 
 
 
+
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework import status
+from .models import Student
+
+def enroll_fingerprint(request):
+    if request.method == 'POST':
+        fingerprint_data = request.POST.get('fingerprint_data', '')
+        # You might need to process the fingerprint data as needed before storing it in the database.
+        # Assuming you have a unique identifier for the student
+        student_id = 'STUDENT_ID'  # Replace with the actual student ID
+
+        try:
+            # Check if the student already exists
+            student = Student.objects.get(student_id=student_id)
+            student.fprint1 = fingerprint_data
+            student.save()
+        except Student.DoesNotExist:
+            # If the student doesn't exist, create a new one
+            student = Student(student_id=student_id, fprint1=fingerprint_data)
+            student.save()
+
+        return JsonResponse({'message': 'Fingerprint data stored successfully'})
+    else:
+        return JsonResponse({'error': 'Invalid request method'})
+
+
+
+
+
+
 """APIs."""
 class HelloApiView(APIView):
-
     serializer_class=serializers.HelloSerializer
     def get(self,request,format=None):
         an_apiview=[
-
             'Hey Programmer',
             'Thanks for Trying',
             'Everything is gona be ok'
@@ -143,28 +156,42 @@ def Dashboard(request):
 #CRUD STUDENT========START
 
 def Student_Form(request):
-    title='Add Student' 
-    form=StudentForm(request.POST or None)
-    if form.is_valid():
-        form.save()
-        form=StudentForm
-        messages.success(request,'successfully submitted')
-    context={
-        "title":title,
-        "form":form,
+    title = 'Add Student'
+    form = StudentForm(request.POST or None)
+
+
+def Student_Form(request):
+    title = 'Add Student'
+    form = StudentForm(request.POST or None)
+
+    if request.method == 'POST':
+        fingerprint_data = request.POST.get('fingerprint_data', None)
+        if form.is_valid() and fingerprint_data:
+            # If the form is valid and fingerprint data is present in the request
+            student = form.save(commit=False)
+            student.fprint1 = fingerprint_data  # Assign fingerprint data to the model field
+            # Save the student with fingerprint data
+            student.save()
+            form = StudentForm()
+            messages.success(request, 'Student information and fingerprint data saved successfully')
+        else:
+            # Handle form validation errors or missing fingerprint data
+            messages.error(request, 'Failed to save student information or fingerprint data')
+    context = {
+        "title": title,
+        "form": form,
     }
-    return render(request,"insert_student.html",context)
+    return render(request, "insert_student.html", context)
+
 
 
 def student_list(request):
     title='Students Table' 
     queryset = Student.objects.all()
     student_count = Student.objects.count()
-
     context={"title":title,
             "queryset":queryset,
             "student_count":student_count
-
         }
     return render(request,"student_list.html",context)
 
@@ -259,18 +286,12 @@ def simple_upload(request):
                 data[7],
                 data[8],
                 data[9], 
-                data[10]
             )
             value.save()
         messages.success(request,'imported successfully')
         return student_list(request)
-    
 
 
-
-
-
-from .models import Student, Module
 
 def search_student_by_course(request):
     form = SearchStudents(request.POST or None)
@@ -314,14 +335,7 @@ def search_student_by_course(request):
 
 #CRUD STUDENT========END
 
-
-
-#Attendance 
-
-
 from django.utils import timezone
-from datetime import datetime
-
 def clock_in(request):
     if request.method == 'POST':
         student_id = request.POST.get('student_id')
@@ -337,7 +351,6 @@ def clock_in(request):
                 else:
                     # Get the current date
                     current_date = timezone.now().date()
-                    
                     # Filter Module instances that match the student's degree, academic level, and semester
                     matching_courses = Module.objects.filter(
                         deg_code=student.deg_code,
@@ -347,24 +360,27 @@ def clock_in(request):
 
                     # Iterate through matching courses to check for attendance
                     for course in matching_courses:
-                        # Check if attendance exists for the student in the current course and date
-                        existing_attendance = Attendance.objects.filter(student=student, module=course, time_in__date=current_date).first()
-                        
-                        if not existing_attendance:
-                            # Create a new attendance record for the student in this course
-                            attendance = Attendance(student=student, module=course, time_in=timezone.now(), status="Present")
-                            attendance.save()
-                            messages.success(request, 'Clock In successful for course.')                    
-                    # If all matching courses already have attendance records
-                    messages.warning(request, 'No available courses to clock in for this student on this date.')
+                        # Check if the course is scheduled for the current date in the exam timetable
+                        is_scheduled = Exam.objects.filter(module_name=course, exam_date=current_date).exists()
+                        if is_scheduled:
+                            # Check if attendance exists for the student in the current course and date
+                            existing_attendance = Attendance.objects.filter(student=student, module=course, time_in__date=current_date).first()
+                            if not existing_attendance:
+                                # Create a new attendance record for the student in this course
+                                attendance = Attendance(student=student, module=course, time_in=timezone.now(), status="Present")
+                                attendance.save()
+                                messages.success(request, f'Clock In successful for course {course}')
+                        else:
+                            # Course is not scheduled for the current date
+                            messages.warning(request, 'No course  scheduled for today.')
+                    
+                    # If no matching courses are scheduled for the current date
+                    if not matching_courses:
+                        messages.warning(request, 'No available courses to clock in for this student on this date.')
         except Student.DoesNotExist:
             messages.warning(request, 'Student does not exist.')
         return redirect('clock_in')
     return render(request, 'clock_in.html')
-
-
-
-
 
 
 def clock_out(request):
@@ -410,7 +426,49 @@ def Attendance_Form(request):
     return render(request,"preloader.html",context)
 
 
+from django.shortcuts import render
+from .models import Student, Module, Attendance
 
+def expected_students(request, module_code):
+    try:
+        module = Module.objects.get(module_code=module_code)
+        
+        # Retrieve students enrolled in the specific module
+        enrolled_students = Student.objects.filter(deg_code=module.deg_code, student_level=module.academic_level, semester=module.semester).order_by('student_name')
+        
+        # Create a dictionary to store attendance status for each student
+        attendance_status = {}
+        for student in enrolled_students:
+            try:
+                attendance = Attendance.objects.get(student=student, module=module)
+                attendance_status[student] = attendance.status
+            except Attendance.DoesNotExist:
+                # If no attendance record is found, mark the student as "Absent"
+                attendance_status[student] = "Absent"
+        
+    except Module.DoesNotExist:
+        module = None
+        enrolled_students = []
+        attendance_status = {}
+
+    return render(request, 'expected_students.html', {'enrolled_students': enrolled_students, 'module': module, 'attendance_status': attendance_status})
+
+
+
+
+
+
+
+def search_students_by_module(request):
+    if request.method == 'POST':
+        form = ModuleSearchForm(request.POST)
+        if form.is_valid():
+            module_code = form.cleaned_data['module_code']
+            return redirect('expected_students_for_course', module_code=module_code)
+    else:
+        form = ModuleSearchForm()
+    return render(request, 'search_course.html', {'form': form})
+    
 def export_attendance_to_excel(request):
     # Retrieve attendance data from your model
     attendance_data = Attendance.objects.all()
@@ -667,34 +725,6 @@ def delete_room(request, id):
     return redirect('room_list')  # Redirect to a different URL after deletion or GET request
 
 
-
-
-
-
-
-
-
-#CRUD ROOM========END
-
-
-
-#CRUD USER ROLES========START
-def Role_Form(request):
-    title='Add User Role' 
-    form=RoleForm(request.POST or None)
-    if form.is_valid():
-        form.save()
-        form=RoleForm
-        messages.success(request,'successfully submitted')
-    context={
-        "title":title,
-        "form":form,
-    }
-    return render(request,"insert_role.html",context)
-
-#CRUD ROLES========END
-
-
 #CRUD USERS========START
 def User_Form(request):
     title='Add Users' 
@@ -709,13 +739,6 @@ def User_Form(request):
     }
     return render(request,"insert_user.html",context)
 
-#CRUD USERS========END
-
-
-
-
-
-#EXAMINATION CRUD ++++START
 
 def Exam_Form(request):
     title='Time table' 
@@ -740,7 +763,6 @@ def Timetable(request):
     return render(request,"timetable.html",context)
 
 
-
 def update_exam(request, id):
     exam=Exam.objects.get(id=id) 
     form=ExaForm(request.POST or None,instance=exam)
@@ -757,8 +779,4 @@ def delete_exam(request, id):
         exam.delete() 
         messages.success(request,'Deleted Successfully')
         return redirect('timetable')  # Redirect to a success page or another URL after deletion
-    # Handle GET request here if needed
     return redirect('timetable')  # Redirect to a different URL after deletion or GET request
-
-
-

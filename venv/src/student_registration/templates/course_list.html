@@ -9,26 +9,26 @@
   <main id="main" class="main">
 
     <div class="pagetitle">
-      {% if messages %}
-      {%for message in messages%}
-      <p
-      class="alert-success"
-      id="success-message"
-      role="alert"
-      style="display: none;"
-      >
-      {{message}}
-      </p>
-      {%endfor %}
-      {% endif %}
+        {% if messages %}
+        {%for message in messages%}
+        <p
+        class="alert-success text-center p-2"
+        id="success-message"
+        role="alert"
+        style="display: none;"
+        >
+        <i class="bi bi-check success"></i>
+
+        {{message}}
+        </p>
+        {%endfor %}
+        {% endif %}
       <nav>
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="{% url 'dashboard'%}">Home</a></li>
-          <li class="breadcrumb-item active">Dashboard</li>
+          <li class="breadcrumb-item"><a href="{% url 'dashboard'%}" style="color: maroon;text-decoration: underline;">Home</a></li>
+          <li class="breadcrumb-item active">Courses</li>
         </ol>
       </nav>
-      <h1>{{title}}</h1>
-
     </div><!-- End Page Title -->
 
     <section class="section dashboard">
@@ -49,13 +49,13 @@
           >
               {% csrf_token %}
               <input type="text" name="search_query" style="height: 37px;border-radius: 0;border: 1px solid midnightblue;">
-              <button type="submit" title="Search" class="btn btn-primary rounded-0">
+              <button type="submit" title="Search" class="btn rounded-0" style="background-color: maroon; color: #fff;">
                   <i class="bi bi-search"></i>
                   search
               </button>
               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
-              <a href="{%url 'insert_course'%}" style="text-decoration: underline;">Add new</a>
+              <a href="{%url 'insert_course'%}" style="text-decoration: underline;color: maroon;">Add new</a>
 
           </form> <br>
 
@@ -63,34 +63,35 @@
 
       
                     <table class="table table-border table-hover table-striped   table-sm align-content-center m-auto">
-                        <tr class="bg-warning">
-                            <th>COURSE CODE</th>
-                            <th>COURSE NAME</th>
-                            <th>LEVEL</th>
-                            <th>SEMESTER</th>
-                            <th>PROGRAM</th>
-                            <th>Action</th>
+                        <tr style="color: maroon;border: 1px solid maroon;">
+                            <th style="border: 1px solid maroon ;">COURSE CODE</th>
+                            <th style="border: 1px solid maroon ;">COURSE NAME</th>
+                            <th style="border: 1px solid maroon ;">LEVEL</th>
+                            <th style="border: 1px solid maroon ;">SEMESTER</th>
+                            <th style="border: 1px solid maroon ;">PROGRAM</th>
+                            <th style="border: 1px solid maroon ;">Action</th>
                         </tr>
                         {% for instance in queryset %}
                         <tr>
-                            <td class="border">{{instance.module_code}}</td>
-                            <td class="border">{{instance.module_name}}</td>
-                            <td class="border">{{instance.academic_level}}</td>
-                            <td class="border">{{instance.semester}}</td>
-                            <td class="border">{{instance.deg_code}}</td>
-                            <td class="d-flex border" width="100%">
+                            <td style="border: 1px solid maroon ;">{{instance.module_code}}</td>
+                            <td style="border: 1px solid maroon ;">{{instance.module_name}}</td>
+                            <td style="border: 1px solid maroon ;">{{instance.academic_level}}</td>
+                            <td style="border: 1px solid maroon ;">{{instance.semester}}</td>
+                            <td style="border: 1px solid maroon ;">{{instance.deg_code}}</td>
+                            <td class="d-flex" width="100%" style="border: 1px solid maroon ;">
                               <form action="" method="post">
                                 {%csrf_token%}
-                                <button class="btn btn-success" name="course_code">
-                                    <a href="{% url 'update_course' instance.id%}" class="text-light">Edit</a>
+                                <button class="btn btn-outline-danger" name="course_code">
+                                    <a href="{% url 'update_course' instance.id%}" class="text-dark">Edit</a>
                                 </button>
                                 &nbsp;&nbsp;&nbsp;
                             </form>
                             <button
-                            class="btn btn-danger"
+                            class="btn"
                             type="submit"
                             data-bs-toggle="modal"
                             data-bs-target="#staticBackdrop"
+                            style="background-color: maroon; color: #fff;"
                         >Delete</button>
                         <!-- Modal -->
                         <div

@@ -15,7 +15,6 @@ class StudentAdmin(ImportExportModelAdmin):
                  "student_nationalId",
                  "student_birth_date",
                  "deg_code",
-                 "user_role",
                  "student_level",
                  "semester",
                  ]
@@ -41,7 +40,7 @@ class AttendanceAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Student,StudentAdmin)
-admin.site.register(Role)
+# admin.site.register(Role)
 admin.site.register(Room)
 admin.site.register(Invigilator)
 admin.site.register(Exam)

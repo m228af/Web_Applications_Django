@@ -42,10 +42,12 @@ INSTALLED_APPS = [
     "crispy_bootstrap5",
     "import_export",
     "rest_framework",
+    "channels",
 
 
 ]
 
+ASGI_APPLICATION = 'biometric_examguaed.asgi.application'
 
 
 CRISPY_TEMPLATE_PACK ='bootstrap5'
@@ -146,5 +148,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_REDIRECT_URL='dashboard'
 
-ALLOWED_HOSTS = ['127.0.0.1','192.168.253.215', 'localhost']
+ALLOWED_HOSTS = ['127.0.0.1','192.168.56.1', 'localhost']
 

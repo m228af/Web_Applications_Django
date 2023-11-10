@@ -9,7 +9,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=`, initial-scale=1.0">
-        <title>Document</title>
+        <title>All Students</title>
     </head>
     <body>
         <main id="main" class="main">
@@ -31,11 +31,10 @@
                 <nav>
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item">
-                            <a href="{% url 'dashboard'%}">Home</a>
+                            <a href="{% url 'dashboard'%}" style="color: maroon;text-decoration: underline;">Home</a>
                         </li>
-                        <li class="breadcrumb-item active">Dashboard</li>
+                        <li class="breadcrumb-item active">Students</li>
                     </ol>
-                    <h1> {{title}}</h1>
                 </nav>
               
             </div>
@@ -55,8 +54,8 @@
                           >
                               {% csrf_token %}
                               <input type="text" name="search_query" style="height: 37px;border-radius: 0;border: 1px solid midnightblue;">
-                              <button type="submit" title="Search" class="btn btn-primary rounded-0">
-                                  <i class="bi bi-search"></i>
+                              <button type="submit" title="Search" class="btn rounded-0" style="background-color: maroon;color: white;">
+                                  <i class="bi bi-search text-light"></i>
                                   search
                               </button>
                           </form> <br>
@@ -68,42 +67,44 @@
                               enctype="multipart/form-data"
                           >
                               {%csrf_token%}
-                              <input type="file" name="myFile" style="color: red;">
-                              <button type="submit" class="btn btn-success"><i class="bi bi-file-arrow-up"></i>  &nbsp;import</button>                              
+                              <input type="file" name="myFile" style="color:maroon;">
+                              <button type="submit" class="btn btn-outline-danger"><i class="bi bi-file-arrow-up"></i>  &nbsp;import</button>                              
                               &nbsp;&nbsp;&nbsp;
-                              <a href="" class="btn btn-success">Export</a>
+                              <a href="" class="btn" style="background-color: maroon;color: white;">Export</a>
                           </form>
                           <br>
-                                <table class="table table-border table-hover table-striped   table-sm align-content-center m-auto">
-                                    <tr class="bg-warning border-2" >
+                                <table class="table table-border table-hover table-striped   table-sm align-content-center m-auto bg-light">
+                                    <tr style="color: maroon; border: 1px solid maroon;">
                                         <!-- <th>#</th> -->
-                                        <th>STUDENT ID</th>
-                                        <th>NAME</th>
-                                        <th>GENDER</th>
-                                        <th>PROGRAM</th>
-                                        <th>Action</th>
+                                        <th style="border: 1px solid maroon;">STUDENT ID</th>
+                                        <th style="border: 1px solid maroon;">NAME</th>
+                                        <th style="border: 1px solid maroon;">GENDER</th>
+                                        <th style="border: 1px solid maroon;">PROGRAM</th>
+                                        <th style="border: 1px solid maroon;">Action</th>
                                     </tr>
                                     {% if queryset %}
                                     {% for instance in queryset %}
-                                    <tr>
+                                    <tr style="border: 1px solid maroon;">
                                         <!-- <td>{{forloop.counter}}</td> -->
-                                        <td class="bg-light border">{{instance.student_id}}</td>
-                                        <td class="bg-light border">{{instance.student_name}}</td>
-                                        <td class="bg-light border">{{instance.student_gender}}</td>
-                                        <td class="bg-light border">{{instance.deg_code}}</td>
-                                        <td class="d-flex border" width="100%">
+                                        <td class="bg-light" style="border: 1px solid maroon;">{{instance.student_id}}</td>
+                                        <td class="bg-light" style="border: 1px solid maroon;">{{instance.student_name}}</td>
+                                        <td class="bg-light" style="border: 1px solid maroon;">{{instance.student_gender}}</td>
+                                        <td class="bg-light" style="border: 1px solid maroon;">{{instance.deg_code}}</td>
+                                        <td class="d-flex" width="100%">
                                             <form action="" method="post">
                                                 {%csrf_token%}
-                                                <button class="btn btn-success" name="student_id">
-                                                    <a href="{% url 'update_student' instance.id%}" class="text-light">Edit</a>
+                                                <button class="btn btn-outline-danger" name="student_id">
+                                                    <a href="{% url 'update_student' instance.id%}" class="text-dark"  >Edit</a>
                                                 </button>
                                                 &nbsp;&nbsp;&nbsp;
                                             </form>
                                             <button
-                                                class="btn btn-danger"
+                                                class="btn"
                                                 type="submit"
                                                 data-bs-toggle="modal"
                                                 data-bs-target="#staticBackdrop"
+
+                                                style="background-color: maroon;color: white;"
                                             >Delete</button>
                                             <!-- Modal -->
                                             <div

@@ -3,32 +3,38 @@
 {% load crispy_forms_tags %}
 {%block content%}
 {% include 'header.html' %} 
-
-
-  {% include 'side_nav.html' %}
-
+{% include 'side_nav.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invilators-Biometric Examguard</title>
+</head>
+<body>
   <main id="main" class="main">
 
     <div class="pagetitle">
-      {% if messages %}
-      {%for message in messages%}
-      <p
-      class="alert-success"
-      id="success-message"
-      role="alert"
-      style="display: none;"
-      >
-      {{message}}
-      </p>
-      {%endfor %}
-      {% endif %}
+        {% if messages %}
+        {%for message in messages%}
+        <p
+        class="alert-success text-center p-2"
+        id="success-message"
+        role="alert"
+        style="display: none;"
+        >
+        <i class="bi bi-check success"></i>
+
+        {{message}}
+        </p>
+        {%endfor %}
+        {% endif %}
       <nav>
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="{% url 'dashboard'%}">Home</a></li>
-          <li class="breadcrumb-item active">Dashboard</li>
+          <li class="breadcrumb-item"><a href="{% url 'dashboard'%}" style="color: maroon;text-decoration: underline;" >Home</a></li>
+          <li class="breadcrumb-item active">Invigilator List</li>
         </ol>
       </nav>
-      <h1>{{title}}</h1>
      
     </div><!-- End Page Title -->
 
@@ -49,13 +55,13 @@
           >
               {% csrf_token %}
               <input type="text" name="search_query" style="height: 37px;border-radius: 0;border: 1px solid midnightblue;">
-              <button type="submit" title="Search" class="btn btn-primary rounded-0">
-                  <i class="bi bi-search"></i>
+              <button type="submit" title="Search" class="btn rounded-0" style="background-color: maroon;color: white;">
+                  <i class="bi bi-search" ></i>
                   search
               </button>
               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
-              <a href="{%url 'insert_invigilator'%}" style="text-decoration: underline;">Add new</a>
+              <a href="{%url 'insert_invigilator'%}" style="color:maroon;text-decoration:underline;">Add new</a>
 
           </form> <br>
 
@@ -63,36 +69,35 @@
              
 
       
-                    <table class="table table-border table-hover table-striped   table-sm align-content-center m-auto">
-                        <tr class="bg-warning">
-                            <th>EC No/EMPLOYEE ID</th>
-                            <th>FULL NAME</th>
-                            <th>GENDER </th>
-                            <th>NATIONAL ID</th>
-                            <th>ROLE</th>
-                            <th>Action</th> 
+                    <table class="table table-border table-hover table-striped   table-sm align-content-center m-auto" style="border: 1px solid maroon;">
+                        <tr style="border: 1px solid maroon;color: maroon;">
+                            <th style="border: 1px solid maroon;">EC No/EMPLOYEE ID</th>
+                            <th style="border: 1px solid maroon;">FULL NAME</th>
+                            <th style="border: 1px solid maroon;">GENDER </th>
+                            <th style="border: 1px solid maroon;">NATIONAL ID</th>
+                            <th style="border: 1px solid maroon;">Action</th> 
                         </tr>
                         {% for instance in queryset %}
                         <tr>
-                            <td class="bg-light border">{{instance.emp_id}}</td>
-                            <td class="bg-light border">{{instance.emp_name}}</td>
-                            <td class="bg-light border">{{instance.emp_gender}}</td>
-                            <td class="bg-light border">{{instance.empt_email}}</td>
-                            <td class="bg-light border" >{{instance.user_role}}</td> 
+                            <td class="bg-light" style="border: 1px solid maroon;">{{instance.emp_id}}</td>
+                            <td class="bg-light" style="border: 1px solid maroon;">{{instance.emp_name}}</td>
+                            <td class="bg-light" style="border: 1px solid maroon;">{{instance.emp_gender}}</td>
+                            <td class="bg-light" style="border: 1px solid maroon;">{{instance.emp_nationalId}}</td>
                             <!-- <td>{{instance.timestamp}}</td> -->
                             <td class="d-flex">
                               <form action="" method="post">
                                 {%csrf_token%}
-                                <button class="btn btn-success" name="student_id">
-                                    <a href="{% url 'update_invigilator' instance.id%}" class="text-light">Edit</a>
+                                <button class="btn btn-outline-danger text-dark" name="student_id">
+                                    <a href="{% url 'update_invigilator' instance.id%}" class="text-dark">Edit</a>
                                 </button>
                                 &nbsp;&nbsp;&nbsp;
                             </form>
                             <button
-                            class="btn btn-danger"
+                            class="btn"
                             type="submit"
                             data-bs-toggle="modal"
                             data-bs-target="#staticBackdrop"
+                            style="background-color: maroon;color: white;"
                         >Delete</button>
                         <!-- Modal -->
                         <div
@@ -103,8 +108,9 @@
                             tabindex="-1"
                             aria-labelledby="staticBackdropLabel"
                             aria-hidden="true"
+                            
                         >
-                            <div class="modal-dialog">
+                            <div class="modal-dialog" style="border: 1px solid maroon;">
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <button
@@ -112,6 +118,7 @@
                                             class="btn-close"
                                             data-bs-dismiss="modal"
                                             aria-label="Close"
+                                            style="color: maroon;"
                                         ></button>
                                     </div>
                                     <div class="modal-body" >
@@ -154,42 +161,10 @@
             </main>
 
                
-
-               
+     
 
             <script src="{% static 'home/js/custom.js'%}"></script>
-  
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-     
+    
+</body>
+</html>

@@ -10,24 +10,25 @@
 
     <div class="pagetitle">
       {% if messages %}
-                    {%for message in messages%}
-                    <p
-                    class="alert-success"
-                    id="success-message"
-                    role="alert"
-                    style="display: none;"
-                    >
-                    {{message}}
-                    </p>
-                    {%endfor %}
-                    {% endif %}
+      {%for message in messages%}
+      <p
+      class="alert-success text-center p-2"
+      id="success-message"
+      role="alert"
+      style="display: none;"
+      >
+      <i class="bi bi-check success"></i>
+
+      {{message}}
+      </p>
+      {%endfor %}
+      {% endif %}
       <nav>
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="{% url 'dashboard'%}">Home</a></li>
-          <li class="breadcrumb-item active">Dashboard</li>
+          <li class="breadcrumb-item"><a href="{% url 'dashboard'%}" style="color: maroon;text-decoration: underline;">Home</a></li>
+          <li class="breadcrumb-item active">Time table </li>
         </ol>
       </nav>
-      <h1>{{title}}</h1>
       <div class="search-bar">
         <form class="search-form d-flex align-items-center" method="POST" action="#">
           {%csrf_token%}
@@ -51,34 +52,34 @@
 
       
                     <table class="table table-striped border rounded table-hover table-sm align-content-center m-auto">
-                        <tr class="bg-warning">
+                        <tr style="border: 1px sold maroon; color: maroon;">
                             <!-- <th>#</th> -->
-                            <th>DATE</th>
-                            <th>TIME</th>
-                            <th>MODULE</th>
-                            <th>CANDIDATES</th>
-                            <th>VENUE</th>
-                            <th>Action</th> 
-                            <th></th> 
+                            <th style="border: 1px solid maroon;">DATE</th>
+                            <th style="border: 1px solid maroon;">TIME</th>
+                            <th style="border: 1px solid maroon;">MODULE</th>
+                            <th style="border: 1px solid maroon;">CANDIDATES</th>
+                            <th style="border: 1px solid maroon;">VENUE</th>
+                            <th style="border: 1px solid maroon;">Action</th> 
+                            <th style="border: 1px solid maroon;"></th> 
                         </tr>
                         {% for instance in queryset %}
                         <tr>
-                            <td class="bg-light border">{{instance.exam_date}}</td>
-                            <td class="bg-light border">{{instance.exam_time}}</td>
-                            <td class="bg-light border">{{instance.module_name}}</td>
-                            <td class="bg-light border">{{instance.expected_candidates}}</td>
-                            <td class="bg-light border" >{{instance.room_name}}</td>
-                            <td class="bg-light border">
+                            <td style="border: 1px solid maroon;">{{instance.exam_date}}</td>
+                            <td style="border: 1px solid maroon;">{{instance.exam_time}}</td>
+                            <td style="border: 1px solid maroon;">{{instance.module_name}}</td>
+                            <td style="border: 1px solid maroon;">{{instance.expected_candidates}}</td>
+                            <td style="border: 1px solid maroon;" >{{instance.room_name}}</td>
+                            <td style="border: 1px solid maroon;">
                               <form action="" method="post">
                               {%csrf_token%}
-                              <button class="btn btn-success" name="course_code">
-                                  <a href="{% url 'update_exam' instance.id%}" class="text-light">Edit</a>
+                              <button class="btn btn-outline-danger" name="course_code">
+                                  <a href="{% url 'update_exam' instance.id%}" class="text-dark">Edit</a>
                               </button>
                               &nbsp;&nbsp;&nbsp;
                           </form>
                         </td>
 
-                            <td class="d-flex bg-light border" width="100%">
+                            <td class="d-flex bg-light " width="100%" style="border: 1px solid maroon;">
                               
                             <button
                                                 class="btn btn-danger"

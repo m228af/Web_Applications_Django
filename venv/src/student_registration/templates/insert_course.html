@@ -11,11 +11,9 @@
       <nav>
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="{% url 'dashboard'%}" style="color: orangered;text-decoration: underline;">Home</a></li>
-          <li class="breadcrumb-item active">Dashboard</li>
+          <li class="breadcrumb-item active">Add New Course</li>
         </ol>
-      </nav>
-      <h1>Insert New Programme</h1>
-     
+      </nav>     
     </div><!-- End Page Title -->
 
     <section class="section dashboard">
@@ -28,22 +26,28 @@
             <!-- Customers Card -->
             <div class="container">
 
-                {% if messages %}
-                <div class="alert alert-success" id="success-message" role="alert" style="display: none;">
+              {% if messages %}
+              {%for message in messages%}
+              <p
+              class="alert-success text-center p-2"
+              id="success-message"
+              role="alert"
+              style="display: none;"
+              >
+              <i class="bi bi-check success"></i>
 
-                  {% for message in messages %}
-                    <p>{{ message }}</p>
-                  {% endfor %}
-                </div>
+              {{message}}
+              </p>
+              {%endfor %}
+              {% endif %}
 
-                {% endif %}
 
               <form action="" method="post" id="StudentForm" autocomplete="off">
 
                 {% csrf_token %}
                 <div class="container-fluid">
                   {{ form|crispy }}
-                  <input type="submit" value="Submit" class="btn btn-success">
+                  <input type="submit" value="Submit" class="btn" style="background-color: maroon;color: white;">
                 </div>
               </form>
               

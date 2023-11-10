@@ -45,34 +45,6 @@
       </ul>
     </li><!-- End Components Nav -->
 
-    <li class="nav-item">
-      <a class="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
-        <i class="bi bi-person-circle"></i><span>User management</span><i class="bi bi-chevron-down ms-auto"></i>
-      </a>
-      <ul id="forms-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-        <li>
-          <a href="{%url 'insert_role'%}">
-            <i class="bi bi-person-circle"></i><span>Add User Role</span>
-          </a>
-        </li>
-        <!-- <li>
-          <a href="{%url 'insert_user'%}">
-            <i class="bi bi-person-circle"></i><span>Add new user</span>
-          </a>
-        </li> -->
-        <li>
-          <a href="forms-layouts.html">
-            <i class="bi bi-person-circle"></i><span> Delete New User</span>
-          </a>
-        </li>
-        <li>
-          <a href="forms-editors.html">
-            <i class="bi bi-circle"></i><span>Change Password</span>
-          </a>
-        </li>
-        
-      </ul>
-    </li><!-- End Forms Nav -->
 
     <li class="nav-item">
       <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="collapse" href="#">
@@ -208,33 +180,12 @@
     </li><!-- End Icons Nav -->
 
 
-
-    
-
-
-
-  
-
     <li class="nav-item">
-      <a class="nav-link collapsed" href="#">
-        <i class="bi bi-question-circle">System</i>
-        <span></span>
+      <a class="nav-link collapsed" href="{% url 'search_students_by_module'%}">
+        <i class="bi bi-file-earmark"></i>
+        <span>Expected Students by course</span>
       </a>
-    </li><!-- End F.A.Q Page Nav -->
-
-    <li class="nav-item">
-      <a class="nav-link collapsed" href="pages-contact.html">
-        <i class="bi bi-envelope"></i>
-        <span>Design Time Table</span>
-      </a>
-    </li><!-- End Contact Page Nav -->
-
-    <li class="nav-item">
-      <a class="nav-link collapsed" href="pages-register.html">
-        <i class="bi bi-card-list"></i>
-        <span>Other</span>
-      </a>
-    </li><!-- End Register Page Nav -->
+    </li><!-- End Blank Page Nav -->
 
     <li class="nav-item">
       <a class="nav-link collapsed" href="/logout">
