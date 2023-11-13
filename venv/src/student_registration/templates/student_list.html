@@ -81,6 +81,8 @@
                                         <th style="border: 1px solid maroon;">GENDER</th>
                                         <th style="border: 1px solid maroon;">PROGRAM</th>
                                         <th style="border: 1px solid maroon;">Action</th>
+                                        <th style="border: 1px solid maroon;">Action</th>
+
                                     </tr>
                                     {% if queryset %}
                                     {% for instance in queryset %}
@@ -90,6 +92,7 @@
                                         <td class="bg-light" style="border: 1px solid maroon;">{{instance.student_name}}</td>
                                         <td class="bg-light" style="border: 1px solid maroon;">{{instance.student_gender}}</td>
                                         <td class="bg-light" style="border: 1px solid maroon;">{{instance.deg_code}}</td>
+                                        <td class="bg-light" style="border: 1px solid maroon;">{{instance.fprin1}}</td>
                                         <td class="d-flex" width="100%">
                                             <form action="" method="post">
                                                 {%csrf_token%}

@@ -16,11 +16,18 @@ class RegisterForm(UserCreationForm):
 
 class StudentForm(forms.ModelForm):
     class Meta:
-        model=Student
-        fields="__all__"
-    # def __init__(self,*args,**kwargs):
-    #     super(StudentForm,self).__init__(*args,**kwargs)
-    #     self.fields['student_id'].required =False
+        model = Student
+        fields = ['student_id', 'student_name', 'student_gender', 'student_email', 'student_nationalId', 'student_birth_date', 'deg_code', 'student_level', 'semester', 'fprint1']
+
+    def __init__(self, *args, **kwargs):
+        super(StudentForm, self).__init__(*args, **kwargs)
+        # Make all fields optional
+        for field in self.fields:
+            self.fields[field].required = False
+
+
+
+
 class AttendanceForm(forms.ModelForm):
     class Meta:
         model=Attendance

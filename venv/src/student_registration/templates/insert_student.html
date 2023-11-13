@@ -1,5 +1,5 @@
 {% load static %}
-{% load crispy_forms_tags %}
+{% load crispy_forms_tags%}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -80,7 +80,8 @@
               <form method="post" id="StudentForm" autocomplete="off">
                 {% csrf_token %}
                 <div class="container-fluid">
-                  {{ form|crispy }}
+
+                  {{form | crispy}}
                   <input type="submit" value="Submit" class="btn text-light" style="background-color: maroon;">
                 </div>
               </form>

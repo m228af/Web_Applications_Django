@@ -57,12 +57,12 @@ class Student(models.Model):
     student_gender=models.CharField("GENDER",max_length=10,choices=Gender.choices)
     student_email=models.CharField("EMAIL ADDRESS",max_length=30,unique=True)
     student_nationalId=models.CharField("NATIONAL ID",max_length=30,unique=True)
-    student_birth_date=models.DateField("D.O.B",auto_now_add=False, auto_now=False, blank=False,null=False)
-    deg_code=models.ForeignKey(Degree, on_delete=models.CASCADE)
+    student_birth_date=models.DateField("D.O.B",auto_now_add=False, auto_now=False, blank=False,null=True)
+    deg_code=models.ForeignKey(Degree, on_delete=models.CASCADE,null=True)
     # user_role=models.ForeignKey(Role,on_delete=models.CASCADE)
-    student_level=models.IntegerField("ACADEMIC LEVEL")
-    semester=models.IntegerField("SEMESTER")
-    fprint1=models.BinaryField(blank=True,null=True)
+    student_level=models.IntegerField("ACADEMIC LEVEL",null=True)
+    semester=models.IntegerField("SEMESTER",null=True)
+    fprint1=models.TextField(blank=True,null=True)
     def __str__(self):
         return self.student_id
     

@@ -72,6 +72,25 @@ def enroll_fingerprint(request):
 
 
 
+
+# views.py
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from .models import Attendance
+
+@api_view(['POST'])
+def save_attendance(request):
+    student_id = request.data.get('student_id')
+    if not student_id:
+        return Response({'error': 'Student ID is required.'}, status=400)
+
+    attendance = Attendance(student_id=student_id)
+    attendance.save()
+
+    return Response({'success': True}, status=200)
+
+
+
 """APIs."""
 class HelloApiView(APIView):
     serializer_class=serializers.HelloSerializer
@@ -158,31 +177,107 @@ def Dashboard(request):
 def Student_Form(request):
     title = 'Add Student'
     form = StudentForm(request.POST or None)
-
-
-def Student_Form(request):
-    title = 'Add Student'
-    form = StudentForm(request.POST or None)
-
     if request.method == 'POST':
-        fingerprint_data = request.POST.get('fingerprint_data', None)
-        if form.is_valid() and fingerprint_data:
-            # If the form is valid and fingerprint data is present in the request
-            student = form.save(commit=False)
-            student.fprint1 = fingerprint_data  # Assign fingerprint data to the model field
-            # Save the student with fingerprint data
+        if form.is_valid():
+            student = form.save(commit=False)  # Save the form data without committing to the database
             student.save()
-            form = StudentForm()
-            messages.success(request, 'Student information and fingerprint data saved successfully')
-        else:
-            # Handle form validation errors or missing fingerprint data
-            messages.error(request, 'Failed to save student information or fingerprint data')
+            return redirect('capture_fingerprint', student_id=student.id)
+    
     context = {
-        "title": title,
-        "form": form,
+        'title': title,
+        'form': form,
     }
-    return render(request, "insert_student.html", context)
+    return render(request, 'insert_student.html', context)
 
+
+
+from django.shortcuts import render, get_object_or_404
+from student_registration.models import Student
+
+
+
+from django.shortcuts import render
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from .form import StudentForm
+from .models import Student
+from django.contrib import messages
+
+@csrf_exempt
+def capture_student(request):
+    if request.method == 'POST':
+        fingerprint_id = request.POST.get('fingerprint_id')
+        fingerprint_data = {'fprint1': fingerprint_id}
+        form = StudentForm(fingerprint_data)
+
+        if form.is_valid():
+            student = form.save()
+            messages.success(request, 'Captured Successfully')
+            response_data = {
+                'status': 'success',
+                'message': 'Student captured successfully',
+                'student_id': student.id
+            }
+            return JsonResponse(response_data)
+        else:
+            response_data = {
+                'status': 'error',
+                'errors': form.errors.as_json()
+            }
+            return JsonResponse(response_data, status=400)
+    elif request.method == 'GET':
+        form = StudentForm()
+        return render(request, 'insert_student.html', {'form': form})
+    else:
+        return JsonResponse({'status': 'error', 'message': 'Invalid request method'}, status=400)
+
+
+
+
+def capture_fingerprint(request, student_id):
+    student = get_object_or_404(Student, id=student_id)
+    if request.method == 'POST':
+        # Process the captured fingerprint data
+        fingerprint_data = request.POST.get('fprint1')
+        
+        # Update the student record with the captured fingerprint data
+        student.fprint1 = fingerprint_data
+        student.save()
+        
+        return redirect('student_list', student_id=student_id)
+    
+    context = {
+        'student': student,
+    }
+    return render(request, 'enroll_prints.html', context)
+
+
+
+
+
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
+
+from django.shortcuts import render, HttpResponse
+from django.http import JsonResponse
+
+from django.views.decorators.csrf import csrf_exempt
+
+@csrf_exempt
+def enroll_student(request):
+    if request.method == 'POST':
+        fingerprint_data = request.POST.get('fprint1', None)
+        
+        if fingerprint_data:
+            # Save the fingerprint data in the specific field of your model
+            student = Student.objects.create(fprint1=fingerprint_data)
+            messages.success(request, 'Fingerprint data saved successfully')
+            return JsonResponse({'success': True})
+        else:
+            return JsonResponse({'success': False, 'error': 'Fingerprint data is missing'})
+    else:
+        return JsonResponse({'error': 'Only POST requests are supported for this endpoint.'}, status=405)
+    
 
 
 def student_list(request):

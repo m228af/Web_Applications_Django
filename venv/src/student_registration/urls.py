@@ -95,6 +95,12 @@ path('search-by-module/', views.search_students_by_module, name='search_students
 
 path('api/enroll-fingerprint/', views.enroll_fingerprint, name='enroll_fingerprint'),
 
+path('api/attendance/', views.save_attendance, name='save_attendance'),
+path('enroll-student/', views.enroll_student, name='enroll_student'),
+
+
+path('capture-fingerprint/<int:student_id>/', views.capture_fingerprint, name='capture_fingerprint'),
+path('capture-student/', views.capture_student, name='capture_student'),
 
 
 ]
