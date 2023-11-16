@@ -4,7 +4,6 @@ from .models import *
 from django.contrib import messages
 from django.utils import timezone
 from django.http import HttpResponse
-from openpyxl import load_workbook
 from .resources import StudentResource
 from tablib import Dataset
 from rest_framework.views import APIView
@@ -12,15 +11,14 @@ from rest_framework.response import Response
 from . import serializers
 from rest_framework import status
 from django.utils import timezone
-from datetime import timedelta
 from django.contrib import messages
 from django.http import HttpResponse
 from openpyxl import Workbook
-from openpyxl.utils.dataframe import dataframe_to_rows
 from django.shortcuts import render
 from .models import Attendance  # Import the Attendance model
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 @csrf_exempt
 def handle_http_request(request):
@@ -281,15 +279,33 @@ def enroll_student(request):
 
 
 def student_list(request):
-    title='Students Table' 
+    title = 'Students Table'
     queryset = Student.objects.all()
-    student_count = Student.objects.count()
-    context={"title":title,
-            "queryset":queryset,
-            "student_count":student_count
-        }
-    return render(request,"student_list.html",context)
+    # Set the number of items per page
+    items_per_page = 4
+    # Create a Paginator instance
+    paginator = Paginator(queryset, items_per_page)
+    # Get the current page number from the request's GET parameters
+    page = request.GET.get('page')
 
+    try:
+        # Get the Page object for the requested page
+        students = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver the first page
+        students = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range (e.g., 9999), deliver the last page
+        students = paginator.page(paginator.num_pages)
+
+    student_count = Student.objects.count()
+    context = {
+        "title": title,
+        "students": students,
+        "student_count": student_count
+    }
+
+    return render(request, "student_list.html", context)
 
 
 
@@ -426,56 +442,104 @@ def search_student_by_course(request):
 
 
 
+from django.http import JsonResponse
+from .models import Student  # Import your Student model here
+
+def get_student_info(request, student_id):
+    try:
+        # Assuming fingerprint_id is a unique identifier in your Student model
+        student = Student.objects.get(fingerprint_id=student_id)
+
+        # Retrieve relevant information from the student model
+        student_info = {
+            "student_id": student.student_id,
+            "student_name": student.student_name,
+            # Add other fields as needed
+        }
+
+        # Return the response as JSON
+        return JsonResponse({"student_info": student_info})
+
+    except Student.DoesNotExist:
+        return JsonResponse({"error": "Student not found"}, status=404)
+
+
+
+
+
 
 
 #CRUD STUDENT========END
 
+from django.db.models import Max
+from django.shortcuts import render
 from django.utils import timezone
+from django.contrib import messages
+from .models import Student, Module, Exam, Attendance
+
 def clock_in(request):
+    success_message = None
+
     if request.method == 'POST':
         student_id = request.POST.get('student_id')
         action = request.POST.get('action')
-        form = AttendanceForm()
+
         try:
             student = Student.objects.get(student_id=student_id)
-            if action == 'Clock In':
-                # Check if the student is already clocked in
-                attendance = Attendance.objects.filter(student=student, time_out__isnull=True).first()
-                if attendance:
-                    messages.warning(request, 'You are already clocked in for a course.')
-                else:
-                    # Get the current date
-                    current_date = timezone.now().date()
-                    # Filter Module instances that match the student's degree, academic level, and semester
-                    matching_courses = Module.objects.filter(
-                        deg_code=student.deg_code,
-                        academic_level=student.student_level,
-                        semester=student.semester
-                    )
+            current_date = timezone.now().date()
+            midnight_today = timezone.make_aware(timezone.datetime(current_date.year, current_date.month, current_date.day))
 
-                    # Iterate through matching courses to check for attendance
-                    for course in matching_courses:
-                        # Check if the course is scheduled for the current date in the exam timetable
-                        is_scheduled = Exam.objects.filter(module_name=course, exam_date=current_date).exists()
-                        if is_scheduled:
-                            # Check if attendance exists for the student in the current course and date
-                            existing_attendance = Attendance.objects.filter(student=student, module=course, time_in__date=current_date).first()
-                            if not existing_attendance:
-                                # Create a new attendance record for the student in this course
-                                attendance = Attendance(student=student, module=course, time_in=timezone.now(), status="Present")
+            matching_courses = Module.objects.filter(
+                deg_code=student.deg_code,
+                academic_level=student.student_level,
+                semester=student.semester
+            )
+
+            last_clocked_in_course = Attendance.objects.filter(
+                student=student,
+                time_in__gte=midnight_today,
+                time_out__isnull=True
+            ).order_by('-time_in').first()
+
+            if action == 'Clock In':
+                clocked_in_flag = False
+
+                for course in matching_courses:
+                    is_scheduled = Exam.objects.filter(module_name=course, exam_date=current_date).exists()
+
+                    if is_scheduled:
+                        if last_clocked_in_course is None or last_clocked_in_course.module != course:
+                            if not Attendance.objects.filter(
+                                student=student,
+                                module=course,
+                                time_in__gte=midnight_today,
+                                time_out__isnull=True
+                            ).exists():
+                                max_seat_number = Attendance.objects.filter(module=course, time_in__gte=midnight_today).aggregate(Max('seat_number'))['seat_number__max'] or 0
+
+                                attendance = Attendance(
+                                    student=student,
+                                    module=course,
+                                    time_in=timezone.now(),
+                                    status="Present",
+                                    seat_number=max_seat_number + 1
+                                )
                                 attendance.save()
-                                messages.success(request, f'Clock In successful for course {course}')
-                        else:
-                            # Course is not scheduled for the current date
-                            messages.warning(request, 'No course  scheduled for today.')
-                    
-                    # If no matching courses are scheduled for the current date
-                    if not matching_courses:
-                        messages.warning(request, 'No available courses to clock in for this student on this date.')
+                                messages.success(request, f'Clock In successful for course {course}. Your Seat Number is: {attendance.seat_number}')
+                                # success_message = f'Clock In successful for course {course}. Your Seat Number is: {attendance.seat_number}'
+                                last_clocked_in_course = attendance
+                                clocked_in_flag = True
+                            else:
+                                messages.warning(request, f'You have already clocked in for course {course}.')
+                                break
+                if not clocked_in_flag:
+                    messages.warning(request, 'No course scheduled for the day.')
+            else:
+                messages.warning(request, 'Invalid action.')
         except Student.DoesNotExist:
             messages.warning(request, 'Student does not exist.')
-        return redirect('clock_in')
-    return render(request, 'clock_in.html')
+    return render(request, 'clock_in.html', {'success_message': success_message})
+
 
 
 def clock_out(request):

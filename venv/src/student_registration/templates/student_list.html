@@ -1,183 +1,188 @@
-{%load static%}
+{% load static %}
 {% include 'base.html' %}
 {% load crispy_forms_tags %}
-{%block content%}
-{% include 'header.html' %}
-{% include 'side_nav.html' %}
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=`, initial-scale=1.0">
-        <title>All Students</title>
-    </head>
-    <body>
-        <main id="main" class="main">
-            <div class="pagetitle">
-              {% if messages %}
-                    {%for message in messages%}
-                    <p
-                    class="alert-success text-center p-2"
-                    id="success-message"
-                    role="alert"
-                    style="display: none;"
-                    >
-                    <i class="bi bi-check success"></i>
-
-                    {{message}}
-                    </p>
-                    {%endfor %}
+{% block content %}
+    {% include 'header.html' %}
+    {% include 'side_nav.html' %}
+    <!DOCTYPE html>
+    <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=`, initial-scale=1.0">
+            <title>All Students</title>
+        </head>
+        <body>
+            <main id="main" class="main">
+                <div class="pagetitle">
+                    {% if messages %}
+                        {% for message in messages %}
+                            <p
+                            class="alert-success text-center p-2"
+                            id="success-message"
+                            role="alert"
+                            style="display: none;"
+                            >
+                                <i class="bi bi-check success"></i>
+                                {{message}}
+                            </p>
+                        {% endfor %}
                     {% endif %}
-                <nav>
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item">
-                            <a href="{% url 'dashboard'%}" style="color: maroon;text-decoration: underline;">Home</a>
-                        </li>
-                        <li class="breadcrumb-item active">Students</li>
-                    </ol>
-                </nav>
-              
-            </div>
-            <!-- End Page Title -->
-            <section class="section dashboard">
-                <div class="row">
-                    <!-- Left side columns -->
-                    <div class="col-lg-12">
-                        <div class="row">
-                            <!-- Customers Card -->
-                            <div class="container">
-                              <form
-                              class="search-form d-flex align-items-center "
-                              method="POST"
-                              action="{% url 'search' %}"
-                              autocomplete="off"
-                          >
-                              {% csrf_token %}
-                              <input type="text" name="search_query" style="height: 37px;border-radius: 0;border: 1px solid midnightblue;">
-                              <button type="submit" title="Search" class="btn rounded-0" style="background-color: maroon;color: white;">
-                                  <i class="bi bi-search text-light"></i>
-                                  search
-                              </button>
-                          </form> <br>
+                    <nav>
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item">
+                                <a href="{% url 'dashboard'%}" style="color: maroon;text-decoration: underline;">Home</a>
+                            </li>
+                            <li class="breadcrumb-item active">Students</li>
+                        </ol>
+                    </nav>
+                </div>
+                <!-- End Page Title -->
+                <section class="section dashboard">
+                    <div class="row">
+                        <!-- Left side columns -->
+                        <div class="col-lg-12">
+                            <div class="row">
+                                <!-- Customers Card -->
+                                <div class="container">
+                                    <form
+                                    class="search-form d-flex align-items-center "
+                                    method="POST"
+                                    action="{% url 'search' %}"
+                                    autocomplete="off"
+                                >
+                                    {% csrf_token %}
+                                    <input type="text" name="search_query" style="height: 37px;border-radius: 0;border: 1px solid midnightblue;">
+                                    <button type="submit" title="Search" class="btn rounded-0" style="background-color: maroon;color: white;">
+                                        <i class="bi bi-search text-light"></i>
+                                        search
+                                    </button>
+                                </form> <br>
 
-                              <form
-                              class="search-form d-flex align-items-center"
-                              method="POST"
-                              action="{%url 'import_student'%}"
-                              enctype="multipart/form-data"
-                          >
-                              {%csrf_token%}
-                              <input type="file" name="myFile" style="color:maroon;">
-                              <button type="submit" class="btn btn-outline-danger"><i class="bi bi-file-arrow-up"></i>  &nbsp;import</button>                              
-                              &nbsp;&nbsp;&nbsp;
-                              <a href="" class="btn" style="background-color: maroon;color: white;">Export</a>
-                          </form>
-                          <br>
-                                <table class="table table-border table-hover table-striped   table-sm align-content-center m-auto bg-light">
-                                    <tr style="color: maroon; border: 1px solid maroon;">
-                                        <!-- <th>#</th> -->
-                                        <th style="border: 1px solid maroon;">STUDENT ID</th>
-                                        <th style="border: 1px solid maroon;">NAME</th>
-                                        <th style="border: 1px solid maroon;">GENDER</th>
-                                        <th style="border: 1px solid maroon;">PROGRAM</th>
-                                        <th style="border: 1px solid maroon;">Action</th>
-                                        <th style="border: 1px solid maroon;">Action</th>
-
-                                    </tr>
-                                    {% if queryset %}
-                                    {% for instance in queryset %}
-                                    <tr style="border: 1px solid maroon;">
-                                        <!-- <td>{{forloop.counter}}</td> -->
-                                        <td class="bg-light" style="border: 1px solid maroon;">{{instance.student_id}}</td>
-                                        <td class="bg-light" style="border: 1px solid maroon;">{{instance.student_name}}</td>
-                                        <td class="bg-light" style="border: 1px solid maroon;">{{instance.student_gender}}</td>
-                                        <td class="bg-light" style="border: 1px solid maroon;">{{instance.deg_code}}</td>
-                                        <td class="bg-light" style="border: 1px solid maroon;">{{instance.fprin1}}</td>
-                                        <td class="d-flex" width="100%">
-                                            <form action="" method="post">
-                                                {%csrf_token%}
-                                                <button class="btn btn-outline-danger" name="student_id">
-                                                    <a href="{% url 'update_student' instance.id%}" class="text-dark"  >Edit</a>
-                                                </button>
-                                                &nbsp;&nbsp;&nbsp;
-                                            </form>
-                                            <button
-                                                class="btn"
-                                                type="submit"
-                                                data-bs-toggle="modal"
-                                                data-bs-target="#staticBackdrop"
-
-                                                style="background-color: maroon;color: white;"
-                                            >Delete</button>
-                                            <!-- Modal -->
-                                            <div
-                                                class="modal bg-light"
-                                                id="staticBackdrop"
-                                                data-bs-backdrop="static"
-                                                data-bs-keyboard="false"
-                                                tabindex="-1"
-                                                aria-labelledby="staticBackdropLabel"
-                                                aria-hidden="true"
-                                            >
-                                                <div class="modal-dialog p-5">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
+                                <form
+                                class="search-form d-flex align-items-center"
+                                method="POST"
+                                action="{%url 'import_student'%}"
+                                enctype="multipart/form-data"
+                            >
+                                {%csrf_token%}
+                                <input type="file" name="myFile" style="color:maroon;">
+                                <button type="submit" class="btn btn-outline-danger"><i class="bi bi-file-arrow-up"></i>  &nbsp;import</button>
+                                &nbsp;&nbsp;&nbsp;
+                                <a href="" class="btn" style="background-color: maroon;color: white;">Export</a>
+                            </form>
+                            <br>
+                            <table class="table table-border table-hover table-striped   table-sm align-content-center m-auto bg-light">
+                                <tr style="color: maroon; border: 1px solid maroon;">
+                                    <!-- <th>#</th> -->
+                                    <th style="border: 1px solid maroon;">STUDENT ID</th>
+                                    <th style="border: 1px solid maroon;">NAME</th>
+                                    <th style="border: 1px solid maroon;">GENDER</th>
+                                    <th style="border: 1px solid maroon;">PROGRAM</th>
+                                    <!-- <th style="border: 1px solid maroon;">Fingerprint ID</th> -->
+                                    <th style="border: 1px solid maroon;">Action</th>
+                                </tr>
+                                {% for instance in students %}
+                                <tr style="border: 1px solid maroon;">
+                                    <!-- <td>{{forloop.counter}}</td> -->
+                                    <td class="bg-light" style="border: 1px solid maroon;">{{instance.student_id}}</td>
+                                    <td class="bg-light" style="border: 1px solid maroon;">{{instance.student_name}}</td>
+                                    <td class="bg-light" style="border: 1px solid maroon;">{{instance.student_gender}}</td>
+                                    <td class="bg-light" style="border: 1px solid maroon;">{{instance.deg_code}}</td>
+                                    <!-- <td class="bg-light" style="border: 1px solid maroon;">{{instance.id}}</td> -->
+                                    <td class="d-flex" width="100%">
+                                        <form action="" method="post">
+                                            {% csrf_token %}
+                                            <button class="btn btn-outline-danger" name="student_id">
+                                                <a href="{% url 'update_student' instance.id%}" class="text-dark"  >Edit</a>
+                                            </button>
+                                            &nbsp;&nbsp;&nbsp;
+                                        </form>
+                                        <button
+                                            class="btn"
+                                            type="submit"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#staticBackdrop"
+                                            style="background-color: maroon;color: white;"
+                                        >Delete</button>
+                                        <!-- Modal -->
+                                        <div
+                                            class="modal bg-light"
+                                            id="staticBackdrop"
+                                            data-bs-backdrop="static"
+                                            data-bs-keyboard="false"
+                                            tabindex="-1"
+                                            aria-labelledby="staticBackdropLabel"
+                                            aria-hidden="true"
+                                        >
+                                            <div class="modal-dialog p-5">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <button
+                                                            type="button"
+                                                            class="btn-close"
+                                                            data-bs-dismiss="modal"
+                                                            aria-label="Close"
+                                                        ></button>
+                                                    </div>
+                                                    <div class="modal-body" >
+                                                        <p>Are you sure you want to delete this record <i class="bi bi-question success border"></i> This action cannot be reversed</p>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <form action="{%url 'delete_student' instance.id%}" method="post" autocomplete="off">
+                                                            {% csrf_token %}
                                                             <button
-                                                                type="button"
-                                                                class="btn-close"
-                                                                data-bs-dismiss="modal"
-                                                                aria-label="Close"
-                                                            ></button>
-                                                        </div>
-                                                        <div class="modal-body" >
-
-                                                            <p>Are you sure you want to delete this record <i class="bi bi-question success border"></i> This action cannot be reversed</p>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <form action="{%url 'delete_student' instance.id%}" method="post" autocomplete="off">
-                                                                {%csrf_token%}
-                                                                <button
-                                                                    class="btn btn-danger"
-                                                                    type="submit"
-                                                                    data-bs-toggle="modal"
-                                                                    data-bs-target="#staticBackdrop"
-                                                                >Delete</button>
-                                                            </form>
-                                                            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cancel</button>
-                                                        </div>
+                                                                class="btn btn-danger"
+                                                                type="submit"
+                                                                data-bs-toggle="modal"
+                                                                data-bs-target="#staticBackdrop"
+                                                            >Delete</button>
+                                                        </form>
+                                                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cancel</button>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </td>
-                                    </tr>
-                                    {% endfor %}
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </table>
+                            <br>
+                            <!-- Pagination Links -->
+                            <nav aria-label="Page navigation example text-center">
+                                <ul class="pagination">
+                                    {% if students.has_previous %}
+                                        <li class="page-item"><a class="page-link" style="color: maroon;" href="?page=1">&laquo; first</a></li>
+                                        <li class="page-item"><a class="page-link" style="color: maroon;" href="?page={{ students.previous_page_number }}">previous</a></li>
+                                    {% endif %}
 
-                                    {%else %}
-                                   <tr>
-                                    <td class="mx-auto text-center border-o">No data available</td>
-                                   </tr>
+                                    <li class="page-item disabled">
+                                        <span class="page-link" style="background-color: maroon; color: white;">
+                                            Page {{ students.number }} of {{ students.paginator.num_pages }}
+                                        </span>
+                                    </li>
 
-                                 
-                                </table>
-
-
-                            {%endif%}
+                                    {% if students.has_next %}
+                                        <li class="page-item"><a class="page-link" style="color: maroon;" href="?page={{ students.next_page_number }}">next</a></li>
+                                        <li class="page-item"><a class="page-link" style="color: maroon;" href="?page={{ students.paginator.num_pages }}">last &raquo;</a></li>
+                                    {% endif %}
+                                </ul>
+                            </nav>
+                            <!-- End Pagination Links -->
                         </div>
                         {% endblock %}
                     </div>
                 </div>
-            </div>
-        </main>
-        <!-- Vendor JS Files -->
-        <script src="{% static 'home/vendor/apexcharts/apexcharts.min.js' %}"></script>
-        <script src="{% static 'home/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
-        <script src="{% static 'home/vendor/chart.js/chart.umd.js' %}"></script>
-        <script src="{% static 'home/vendor/echarts/echarts.min.js' %}"></script>
-        <script src="{% static 'home/vendor/quill/quill.min.js' %}"></script>
-        <script src="{% static 'home/vendor/simple-datatables/simple-datatables.js' %}"></script>
-        <script src="{% static 'home/vendor/tinymce/tinymce.min.js' %}"></script>
-        <script src="{% static 'home/vendor/php-email-form/validate.js' %}"></script>
-        <script src="{%static 'home/js/bootstrap.bundle.js'%}"></script>
-        <script src="{% static 'home/js/custom.js'%}"></script>
-    </body>
-</html>
+            </main>
+            <!-- Vendor JS Files -->
+            <script src="{% static 'home/vendor/apexcharts/apexcharts.min.js' %}"></script>
+            <script src="{% static 'home/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+            <script src="{% static 'home/vendor/chart.js/chart.umd.js' %}"></script>
+            <script src="{% static 'home/vendor/echarts/echarts.min.js' %}"></script>
+            <script src="{% static 'home/vendor/quill/quill.min.js' %}"></script>
+            <script src="{% static 'home/vendor/simple-datatables/simple-datatables.js' %}"></script>
+            <script src="{% static 'home/vendor/tinymce/tinymce.min.js' %}"></script>
+            <script src="{% static 'home/vendor/php-email-form/validate.js' %}"></script>
+            <script src="{%static 'home/js/bootstrap.bundle.js'%}"></script>
+            <script src="{% static 'home/js/custom.js'%}"></script>
+        </body>
+    </html>

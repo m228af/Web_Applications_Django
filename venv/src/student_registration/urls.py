@@ -101,7 +101,7 @@ path('enroll-student/', views.enroll_student, name='enroll_student'),
 
 path('capture-fingerprint/<int:student_id>/', views.capture_fingerprint, name='capture_fingerprint'),
 path('capture-student/', views.capture_student, name='capture_student'),
-
+path('get-student-info/<int:fingerprint_id>/', views.get_student_info, name='get_student_info'),
 
 ]
 
